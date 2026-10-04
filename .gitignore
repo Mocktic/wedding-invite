@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+assets-src/downloads/
+*.local
+# original drops (copies live in assets-src/provided/)
+/637124aeaa1929248cdef2953b6c0291_720w.mp4
+/Aditi and Yashwant’s Udaipur Wedding Invitation.png
+/Sepia Lakeside Palace with Lotuses.png

@@ -1,0 +1,26 @@
+{
+  "name": "aditi-yashwant-invite",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "assets": "bash scripts/process-assets.sh"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/pinyon-script": "^5.3.0",
+    "@fontsource/rozha-one": "^5.3.0",
+    "@fontsource/tiro-devanagari-hindi": "^5.3.0",
+    "@phosphor-icons/core": "^2.1.1",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26"
+  },
+  "devDependencies": {
+    "vite": "^8.3.2",
+    "vitest": "^4.1.11"
+  }
+}
