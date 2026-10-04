@@ -31,10 +31,6 @@ webp $TMP/r2.png $OUT/img/roundel-varmala.webp
 webp $TMP/r3.png $OUT/img/roundel-pheras.webp
 webp $TMP/r4.png $OUT/img/roundel-dinner.webp
 
-# Full Jag Niwas painting — Save-the-Date palace layer (cropped to the palace block)
-ff -i $DL/miniatures/jagniwas.jpg -vf "crop=1100:900:680:110,scale=900:-2" $TMP/palace.png
-webp $TMP/palace.png $OUT/img/jagniwas-palace.webp 74
-
 # Venue: colour painting + a sepia pencil-sketch version of the same painting
 ff -i $SRC/provided/lake-palace.png -vf "scale=1080:-2" $TMP/lake.png
 webp $TMP/lake.png $OUT/img/lake-palace.webp 80
