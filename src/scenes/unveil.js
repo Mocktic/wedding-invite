@@ -7,6 +7,7 @@ import { inkMask } from '../lib/inkMask.js';
 
 export function unveil(ctx, { onOpen }) {
   const { config } = ctx;
+  const d = ctx.invite.headline.dayParts;
   const bleed = overlayVideo('alta-bleed', { blend: 'normal', loop: false, className: 'unveil__bleed' });
   bleed.preload = 'auto';
   bleed.src = bleed.dataset.src;
@@ -18,7 +19,7 @@ export function unveil(ctx, { onOpen }) {
     h('div', { class: 'unveil__seal' }, dot),
     h('p', { class: 'unveil__title', lang: 'hi' }, 'शुभ विवाह'),
     h('p', { class: 'unveil__names' }, config.couple.bride, h('span', {}, ' & '), config.couple.groom),
-    h('p', { class: 'unveil__date' }, `${config.date.day} · ${config.date.month} · ${config.date.year}`),
+    h('p', { class: 'unveil__date' }, `${d.day} ${d.month} ${d.year}`),
     cta,
     h('p', { class: 'unveil__hint' }, 'Sound on, please'),
   );

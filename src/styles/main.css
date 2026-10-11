@@ -368,7 +368,11 @@ button, input, textarea { font: inherit; color: inherit; }
 .udaipur__painting { mix-blend-mode: multiply; will-change: transform; }
 .udaipur__boat { mix-blend-mode: darken; }
 .udaipur__glow { mix-blend-mode: screen; filter: sepia(0.35) saturate(1.6) brightness(1.05); opacity: 0; pointer-events: none; }
-.udaipur__mist { left: 0; bottom: 0; width: 100%; height: 32%; opacity: 0; }
+.udaipur__mist {
+  left: 0; bottom: 0; width: 100%; height: 34%; opacity: 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%);
+  mask-image: linear-gradient(to bottom, transparent, #000 55%);
+}
 
 .udaipur__copy {
   position: absolute;
@@ -383,7 +387,7 @@ button, input, textarea { font: inherit; color: inherit; }
   color: var(--copy);
 }
 .udaipur__venue > * { margin: 0; }
-.udaipur__city { font-size: clamp(2.6rem, 12vw, 3.3rem); margin-top: 0.3rem; }
+.udaipur__city { font-size: clamp(2.1rem, 9.6vw, 2.7rem); margin-top: 0.3rem; white-space: nowrap; }
 .udaipur__venue-name { font-family: var(--font-display); font-size: 1.7rem; line-height: 1.2; margin-top: 0.6rem; }
 .udaipur__address { font-style: italic; font-size: 1.05rem; margin: 0.2rem 0 1.1rem; }
 .udaipur__venue .chip { pointer-events: auto; }
@@ -401,8 +405,8 @@ button, input, textarea { font: inherit; color: inherit; }
 .date__rest {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 1.9rem;
+  gap: 0.45rem;
+  font-size: clamp(1.5rem, 7.2vw, 1.85rem);
   padding-left: 0.9rem;
   border-left: 1px solid currentColor;
 }
@@ -452,7 +456,24 @@ button, input, textarea { font: inherit; color: inherit; }
 .day__title { font-size: clamp(2.8rem, 13vw, 3.5rem); color: var(--ivory); margin: 0.1rem 0 0.5rem; }
 .day__header .eyebrow { color: var(--gold-light); }
 
-.day__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4.5rem; position: relative; }
+.day__list, .day__events { list-style: none; margin: 0; padding: 0; display: grid; position: relative; }
+.day__list { gap: 5rem; }
+.day__events { gap: 4.5rem; }
+.day__date {
+  position: relative;
+  margin: 0 auto 2.4rem;
+  width: fit-content;
+  padding: 0.35rem 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  color: var(--gold-light);
+  text-align: center;
+  background: rgba(18, 23, 48, 0.85);
+  border-top: 1px solid rgba(226, 192, 122, 0.45);
+  border-bottom: 1px solid rgba(226, 192, 122, 0.45);
+}
 .moment { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .moment__roundel { position: relative; width: min(64vw, 250px); aspect-ratio: 1; }
 .moment__art {
@@ -470,7 +491,24 @@ button, input, textarea { font: inherit; color: inherit; }
 .moment__text { margin-top: 1.3rem; max-width: 18rem; }
 .moment__time { margin: 0; font-family: var(--font-display); color: var(--gold-light); font-size: 1.15rem; letter-spacing: 0.12em; }
 .moment__title { margin: 0.15rem 0 0.25rem; font-family: var(--font-body); font-weight: 500; font-size: 1.9rem; line-height: 1.15; }
+.moment__subtitle { margin: -0.1rem 0 0.3rem; font-family: var(--font-script); font-size: 1.6rem; line-height: 1.1; color: var(--gold-light); }
 .moment__note { margin: 0; font-style: italic; font-size: 1.08rem; opacity: 0.82; }
+.moment__venue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.7rem 0 0;
+  padding: 0.3rem 0.85rem 0.3rem 0.6rem;
+  border: 1px solid rgba(226, 192, 122, 0.45);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  text-decoration: none;
+}
+.moment__pin svg { width: 1.15rem; height: 1.15rem; fill: currentColor; display: block; }
 
 .diya { position: relative; width: 70px; height: 96px; margin-top: 1rem; }
 .diya__flame {

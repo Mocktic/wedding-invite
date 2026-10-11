@@ -25,8 +25,11 @@ const SKY = {
 const skyVars = ([top, mid, bottom]) => ({ '--sky-top': top, '--sky-mid': mid, '--sky-bottom': bottom });
 
 export function udaipur(app, ctx) {
-  const { config } = ctx;
-  const { venue, date, couple } = config;
+  const { config, invite } = ctx;
+  const { couple } = config;
+  const main = invite.headline;
+  const { venue } = main;
+  const day = main.dayParts;
 
   // ── the painting (sketch below, colour revealed through brush strokes) ──
   const maskId = nextId('wash');
@@ -80,25 +83,27 @@ export function udaipur(app, ctx) {
   const mist = overlayVideo('mist', { blend: 'screen', className: 'udaipur__mist' });
 
   // ── words ──
-  const mapLink = h('a', { class: 'chip', href: venue.mapUrl, target: '_blank', rel: 'noopener', html: `${icons.map}<span>Open in Maps</span>` });
+  const mapLink = venue.mapUrl
+    ? h('a', { class: 'chip', href: venue.mapUrl, target: '_blank', rel: 'noopener', html: `${icons.map}<span>Open in Maps</span>` })
+    : null;
   const venueCopy = h('div', { class: 'udaipur__copy udaipur__venue' },
-    h('p', { class: 'eyebrow' }, 'The celebrations unfold in'),
-    h('p', { class: 'script udaipur__city' }, 'the City of Lakes'),
+    h('p', { class: 'eyebrow' }, main.subtitle ? `The ${main.subtitle} will be held in` : `The ${main.title} will be held in`),
+    h('p', { class: 'script udaipur__city' }, 'the heart of Rajasthan'),
     h('p', { class: 'udaipur__venue-name' }, venue.name),
     h('p', { class: 'udaipur__address' }, venue.address),
     mapLink,
   );
 
-  const dateDay = h('span', { class: 'date__day', 'aria-hidden': 'true' }, date.day);
-  const dateRest = h('span', { class: 'date__rest', 'aria-hidden': 'true' }, h('span', {}, date.month), h('span', {}, date.year));
+  const dateDay = h('span', { class: 'date__day', 'aria-hidden': 'true' }, String(day.day).padStart(2, '0'));
+  const dateRest = h('span', { class: 'date__rest', 'aria-hidden': 'true' }, h('span', {}, day.month), h('span', {}, String(day.year)));
   const countdownEl = h('div', { class: 'countdown', 'aria-live': 'polite' });
   const calButton = h('button', { class: 'chip', type: 'button', html: `${icons.calendar}<span>Add to Calendar</span>` });
   const saveLabel = h('p', { class: 'script udaipur__save' }, 'Save the Date');
-  const weekday = h('p', { class: 'eyebrow udaipur__weekday' }, `${date.weekday} · ${config.city}`);
+  const weekday = h('p', { class: 'eyebrow udaipur__weekday' }, `${day.weekday} · ${main.time}`);
   const extras = h('div', { class: 'udaipur__extras' }, countdownEl, calButton);
   const dateCopy = h('div', { class: 'udaipur__copy udaipur__date' },
     saveLabel,
-    h('p', { class: 'date' }, h('span', { class: 'sr-only' }, date.long), dateDay, dateRest),
+    h('p', { class: 'date' }, h('span', { class: 'sr-only' }, `${day.weekday}, ${day.day} ${day.month} ${day.year}`), dateDay, dateRest),
     weekday,
     extras,
   );
@@ -130,7 +135,7 @@ export function udaipur(app, ctx) {
 
   // Countdown
   const renderCountdown = () => {
-    const t = timeLeft(date.start);
+    const t = timeLeft(main.startISO);
     countdownEl.replaceChildren(...(t.done
       ? [h('span', { class: 'countdown__done' }, 'Today is the day')]
       : [['days', t.days], ['hours', t.hours], ['min', t.minutes]].map(([label, n]) =>
@@ -139,13 +144,15 @@ export function udaipur(app, ctx) {
   renderCountdown();
   setInterval(renderCountdown, 30000);
 
-  calButton.addEventListener('click', () => addToCalendar({
-    title: `${couple.bride} & ${couple.groom} — Wedding`,
-    start: date.start,
-    end: date.end,
-    location: `${venue.name}, ${config.city}`,
+  const calendarEvents = invite.events.map((e) => ({
+    title: `${e.title} · ${couple.bride} & ${couple.groom}`,
+    start: e.startISO,
+    end: e.endISO,
+    location: [e.venue.name, e.venue.address].filter(Boolean).join(', '),
     details: `We can't wait to celebrate with you.\n${location.href}`,
   }));
+  calButton.addEventListener('click', () =>
+    addToCalendar(calendarEvents, calendarEvents[invite.events.indexOf(main)]));
 
   const dabDay = inkMask(dateDay, 'blot');
   const dabRest = inkMask(dateRest, 'blot');
@@ -186,7 +193,7 @@ export function udaipur(app, ctx) {
     .to(section, { ...skyVars(SKY.rose), duration: 1.4 }, 4.7)
     .to(section, { ...skyVars(SKY.dusk), '--copy': '#F7E9D2', duration: 1.6 }, 6.2)
     .to(birds, { autoAlpha: 0, duration: 0.8 }, 6.6)
-    .fromTo(mist, { autoAlpha: 0 }, { autoAlpha: 0.32, duration: 1.6 }, 6.4)
+    .fromTo(mist, { autoAlpha: 0 }, { autoAlpha: 0.24, duration: 1.6 }, 6.4)
   // Act III — night: stars, palace lights, the countdown.
     .to(section, { ...skyVars(SKY.night), duration: 1.4 }, 7.8)
     .fromTo(stars, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2 }, 7.9)

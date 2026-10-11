@@ -2,21 +2,26 @@
 const stamp = (iso) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 const escapeText = (s) => s.replace(/\\/g, '\\\\').replace(/([,;])/g, '\\$1').replace(/\n/g, '\\n');
 
-export function buildICS({ title, start, end, location, details }) {
+const vevent = ({ title, start, end, location, details }) => [
+  'BEGIN:VEVENT',
+  `UID:${stamp(start)}-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}@aditi-yashwant`,
+  `DTSTAMP:${stamp(new Date().toISOString())}`,
+  `DTSTART:${stamp(start)}`,
+  `DTEND:${stamp(end)}`,
+  `SUMMARY:${escapeText(title)}`,
+  `LOCATION:${escapeText(location)}`,
+  `DESCRIPTION:${escapeText(details)}`,
+  'END:VEVENT',
+];
+
+// One event or a list of them in a single calendar file.
+export function buildICS(events) {
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'PRODID:-//Aditi & Yashwant//Wedding Invite//EN',
     'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
-    `UID:${stamp(start)}-aditi-yashwant@invite`,
-    `DTSTAMP:${stamp(new Date().toISOString())}`,
-    `DTSTART:${stamp(start)}`,
-    `DTEND:${stamp(end)}`,
-    `SUMMARY:${escapeText(title)}`,
-    `LOCATION:${escapeText(location)}`,
-    `DESCRIPTION:${escapeText(details)}`,
-    'END:VEVENT',
+    ...[].concat(events).flatMap(vevent),
     'END:VCALENDAR',
   ].join('\r\n');
 }
@@ -33,12 +38,13 @@ export function googleCalendarUrl({ title, start, end, location, details }) {
 
 const prefersICS = () => /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
 
-export function addToCalendar(event) {
+// Apple devices get every event in one .ics; elsewhere Google Calendar opens the main event.
+export function addToCalendar(events, main = [].concat(events)[0]) {
   if (!prefersICS()) {
-    window.open(googleCalendarUrl(event), '_blank', 'noopener');
+    window.open(googleCalendarUrl(main), '_blank', 'noopener');
     return;
   }
-  const blob = new Blob([buildICS(event)], { type: 'text/calendar;charset=utf-8' });
+  const blob = new Blob([buildICS(events)], { type: 'text/calendar;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'aditi-yashwant-wedding.ics';

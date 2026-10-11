@@ -23,7 +23,7 @@ describe('calendar', () => {
     title: 'Aditi & Yashwant — Wedding',
     start: '2026-12-01T16:00:00+05:30',
     end: '2026-12-01T23:30:00+05:30',
-    location: 'Lake Pichola, Udaipur',
+    location: 'Badi Sadri, Rajasthan',
     details: 'With love',
   };
 
@@ -33,8 +33,14 @@ describe('calendar', () => {
     expect(ics).toContain('DTSTART:20261201T103000Z');
     expect(ics).toContain('DTEND:20261201T180000Z');
     expect(ics).toContain('SUMMARY:Aditi & Yashwant — Wedding');
-    expect(ics).toContain('LOCATION:Lake Pichola\\, Udaipur');
+    expect(ics).toContain('LOCATION:Badi Sadri\\, Rajasthan');
     expect(ics.split('\r\n').length).toBeGreaterThan(8);
+  });
+
+  it('puts several events in one ICS file', () => {
+    const ics = buildICS([event, { ...event, title: 'Reception', start: '2026-12-03T18:00:00+05:30', end: '2026-12-03T22:00:00+05:30' }]);
+    expect(ics.match(/BEGIN:VEVENT/g).length).toBe(2);
+    expect(ics).toContain('DTSTART:20261203T123000Z');
   });
 
   it('builds a Google Calendar link', () => {
@@ -59,13 +65,26 @@ describe('validateRsvp', () => {
 });
 
 describe('config', () => {
-  it('has the couple, the date and a schedule', () => {
+  it('has the couple and a complete set of events', () => {
     expect(config.couple.bride).toBe('Aditi');
     expect(config.couple.groom).toBe('Yashwant');
-    expect(new Date(config.date.start).toISOString()).toBe('2026-12-01T10:30:00.000Z');
-    expect(config.schedule.length).toBeGreaterThan(0);
-    for (const item of config.schedule) {
-      expect(item.time && item.title && item.image).toBeTruthy();
+    const ids = new Set();
+    for (const e of config.events) {
+      expect(e.id && e.title && e.image).toBeTruthy();
+      expect(e.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(e.start).toMatch(/^\d{2}:\d{2}$/);
+      expect(config.venues[e.venue], `venue for ${e.id}`).toBeTruthy();
+      expect(typeof e.show).toBe('boolean');
+      ids.add(e.id);
     }
+    expect(ids.has(config.headline)).toBe(true);
+    for (const [name, preset] of Object.entries(config.invites)) {
+      for (const id of preset.events) expect(ids.has(id), `${name} → ${id}`).toBe(true);
+    }
+  });
+
+  it('headlines the Lagan Phere on 2 December', () => {
+    const lagan = config.events.find((e) => e.id === config.headline);
+    expect(lagan.date).toBe('2026-12-02');
   });
 });

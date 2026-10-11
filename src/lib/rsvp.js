@@ -8,6 +8,7 @@ export function validateRsvp({ name = '', message = '' }) {
   return errors;
 }
 
+// data: { name, message, invite } — `invite` is the guest-list preset the link was opened with.
 export async function submitRsvp(data, endpoint) {
   const entry = { ...data, name: data.name.trim(), message: data.message.trim(), at: new Date().toISOString() };
   if (endpoint) {

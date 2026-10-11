@@ -40,12 +40,14 @@ export function rsvp(app, ctx) {
     submit,
   );
 
+  const city = ctx.invite.headline.venue.city;
+  const seeYou = city && city !== 'home' ? `See you in ${city}` : 'See you soon';
   const thanksSvg = s('svg', { class: 'card__thanks-svg', viewBox: '0 0 320 120', 'aria-hidden': 'true' });
   const thanksLine = h('p', { class: 'card__thanks-line' });
   const back = h('div', { class: 'card__face card__back', 'aria-live': 'polite' },
     thanksSvg,
     thanksLine,
-    h('p', { class: 'eyebrow card__see-you' }, 'See you in Udaipur'),
+    h('p', { class: 'eyebrow card__see-you' }, seeYou),
   );
   const card = h('div', { class: 'card' }, form, back);
 
@@ -92,7 +94,7 @@ export function rsvp(app, ctx) {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = { name: nameInput.value, message: message.value };
+    const data = { name: nameInput.value, message: message.value, invite: ctx.invite.name };
     const errors = validateRsvp(data);
     if (errors.name) { showError(errors.name); nameInput.focus(); return; }
     submit.disabled = true;

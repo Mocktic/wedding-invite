@@ -13,6 +13,7 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import Lenis from 'lenis';
 
 import config from './config.js';
+import { resolveInvite } from './lib/invite.js';
 import { h } from './lib/dom.js';
 import { reducedMotion, lowPower } from './lib/motion.js';
 import { preloadInk } from './lib/inkMask.js';
@@ -42,6 +43,7 @@ async function start() {
 
   const ctx = {
     config,
+    invite: resolveInvite(config, location.search),
     reduced: reducedMotion,
     lowPower,
     petals: createPetals(petalCanvas),

@@ -23,11 +23,13 @@ clip() {
 echo "• images"
 # Roundels for "The Day" — crops of public-domain Mewar/Rajput miniatures
 ff -i $DL/miniatures/baraat.jpg   -vf "crop=733:733:697:37,scale=720:720"   $TMP/r1.png
-ff -i $DL/miniatures/varmala.jpg  -vf "crop=860:860:930:560,scale=720:720"  $TMP/r2.png
 ff -i $DL/miniatures/pheras.jpg   -vf "crop=1000:1000:925:500,scale=720:720" $TMP/r3.png
 ff -i $DL/miniatures/jagniwas.jpg -vf "crop=958:958:860:600,scale=720:720"  $TMP/r4.png
+ff -i $DL/miniatures/ganesh.jpg     -vf "crop=520:520:300:240,scale=720:720"   $TMP/r5.png
+ff -i $DL/miniatures/engagement.jpg -vf "crop=1100:1100:706:1592,scale=720:720" $TMP/r6.png
+webp $TMP/r5.png $OUT/img/roundel-ganesh.webp
+webp $TMP/r6.png $OUT/img/roundel-engagement.webp
 webp $TMP/r1.png $OUT/img/roundel-baraat.webp
-webp $TMP/r2.png $OUT/img/roundel-varmala.webp
 webp $TMP/r3.png $OUT/img/roundel-pheras.webp
 webp $TMP/r4.png $OUT/img/roundel-dinner.webp
 
@@ -62,6 +64,9 @@ for f in $TMP/h_*.png; do
   n=$((n+1)); webp "$f" "$(printf "$OUT/seq/hands/%03d.webp" $n)" 70
 done
 echo "  $n frames"
+# Haldi & Mehendi roundel: a frame of the alta hands painting itself
+ff -i $OUT/seq/hands/045.webp -vf "crop=480:480:30:90,scale=720:720" $TMP/r7.png
+webp $TMP/r7.png $OUT/img/roundel-haldi.webp
 
 echo "• ink masks (sprite sheets, alpha = ink)"
 # mask_sprite <name> <frames-png-glob> <cols> <rows>
