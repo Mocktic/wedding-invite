@@ -710,7 +710,10 @@ button, input, textarea { font: inherit; color: inherit; }
   position: fixed;
   z-index: 57;
   left: 50%;
-  bottom: calc(5.5vh + env(safe-area-inset-bottom));
+  /* Anchored from the top of the *small* viewport (browser bars showing), so the
+     address/tool bars that cover the bottom until the first scroll can't crop it. */
+  top: calc(100vh - 18rem);
+  top: calc(100svh - 16rem - env(safe-area-inset-bottom));
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
