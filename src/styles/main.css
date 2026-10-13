@@ -277,14 +277,11 @@ button, input, textarea { font: inherit; color: inherit; }
   visibility: hidden;
 }
 .hands__caption em { font-family: var(--font-script); font-style: normal; font-size: 1.25em; color: #ffd8a8; }
-.hands__wash {
-  position: absolute;
-  inset: 0;
-  background: var(--canvas);
-}
+.hands__wash { position: absolute; inset: 0; }
 
 /* ─────────────── 2 · Names ─────────────── */
-.names { background: var(--canvas); }
+.names { position: absolute; inset: 0; overflow: hidden; background: var(--canvas); }
+.names-static { background: var(--canvas); }
 .names__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .names__blot {
   position: absolute;

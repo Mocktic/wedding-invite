@@ -23,7 +23,7 @@ import { icons } from './lib/icons.js';
 import { scrollHint } from './lib/scrollHint.js';
 import { unveil } from './scenes/unveil.js';
 import { hands } from './scenes/hands.js';
-import { names } from './scenes/names.js';
+import { namesLayer } from './scenes/names.js';
 import { udaipur } from './scenes/udaipur.js';
 import { day } from './scenes/day.js';
 import { rsvp } from './scenes/rsvp.js';
@@ -78,8 +78,7 @@ async function start() {
       document.fonts.load('400 20px "Cormorant Garamond"'),
       document.fonts.load('italic 400 20px "Cormorant Garamond"'),
     ]).catch(() => {});
-    const prologue = hands(app, ctx);
-    names(app, ctx);
+    const prologue = hands(app, ctx, { next: namesLayer(ctx) });
     udaipur(app, ctx);
     day(app, ctx);
     rsvp(app, ctx);

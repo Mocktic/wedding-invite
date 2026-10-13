@@ -64,8 +64,7 @@ Set `endpoint` to any URL that accepts a JSON `POST` `{ name, message, invite, a
 | # | Scene | What happens |
 |---|---|---|
 | 0 | Unveil | Alta dot on raw canvas, शुभ विवाह. Tapping bleeds red ink across the screen and starts the music |
-| 1 | Hands | The painted alta animation plays with scroll, the camera pushes into the dots, the thread runs out, paper floods in |
-| 2 | Names | The thread underlines *Aditi*, loops round the "&", underlines *Yashwant*; the names are brush-painted in |
+| 1–2 | Hands → Names (one pinned shot) | The painted alta animation plays with scroll, the camera pushes into the dots and the thread runs out. The names' paper floods in over the hands while *Aditi* starts painting; the thread underlines her name, loops round the "&", runs down the margin past *Yashwant*, underlines his name and rests on a bead |
 | 3 | Place & date | A pen sketch of a Rajasthani lake palace fills with watercolour (headline venue), the sun sets over it (headline date), palace lights and stars come on (countdown, Add to Calendar) |
 | 4 | The Celebrations | Night. Events grouped by day. The thread winds between miniature-painting roundels, with petals for Haldi and Varmala and diyas for Ganesh Sthapana and the Pheras |
 | 5 | RSVP | The thread ties a knot, then a paper card. Sending it flips the card and sets off petals, fireworks and sparks |
