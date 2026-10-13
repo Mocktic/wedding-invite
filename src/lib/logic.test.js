@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { timeLeft } from './countdown.js';
 import { buildICS, googleCalendarUrl } from './calendar.js';
-import { validateRsvp } from './rsvp.js';
+import { validateRsvp, submitRsvp } from './rsvp.js';
+import { vi } from 'vitest';
 import config from '../config.js';
 
 describe('timeLeft', () => {
@@ -52,15 +53,45 @@ describe('calendar', () => {
 });
 
 describe('validateRsvp', () => {
+  const ok = { name: 'Riya', message: '', events: ['Wedding Ceremony'] };
+
   it('requires a name of at least two letters', () => {
-    expect(validateRsvp({ name: '', message: '' }).name).toBeTruthy();
-    expect(validateRsvp({ name: ' A ', message: '' }).name).toBeTruthy();
-    expect(validateRsvp({ name: 'Riya', message: '' })).toEqual({});
+    expect(validateRsvp({ ...ok, name: '' }).name).toBeTruthy();
+    expect(validateRsvp({ ...ok, name: ' A ' }).name).toBeTruthy();
+    expect(validateRsvp(ok)).toEqual({});
+  });
+
+  it('requires at least one event', () => {
+    expect(validateRsvp({ ...ok, events: [] }).events).toBeTruthy();
+    expect(validateRsvp({ name: 'Riya', message: '' }).events).toBeTruthy();
   });
 
   it('keeps the message optional but bounded', () => {
-    expect(validateRsvp({ name: 'Riya', message: 'x'.repeat(500) })).toEqual({});
-    expect(validateRsvp({ name: 'Riya', message: 'x'.repeat(501) }).message).toBeTruthy();
+    expect(validateRsvp({ ...ok, message: 'x'.repeat(500) })).toEqual({});
+    expect(validateRsvp({ ...ok, message: 'x'.repeat(501) }).message).toBeTruthy();
+  });
+});
+
+describe('submitRsvp', () => {
+  const entry = { name: '  Riya Sharma ', message: ' Congrats! ', events: ['Wedding Ceremony'], invited: ['Wedding Ceremony', 'Wedding Reception'], invite: 'wedding', website: '' };
+
+  it('posts plain-text JSON so Google Apps Script accepts it without a CORS preflight', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ok: true }) });
+    vi.stubGlobal('fetch', fetchMock);
+    const saved = await submitRsvp(entry, 'https://script.google.com/macros/s/x/exec');
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('https://script.google.com/macros/s/x/exec');
+    expect(init.method).toBe('POST');
+    expect(init.headers['Content-Type']).toMatch(/^text\/plain/);
+    expect(JSON.parse(init.body)).toMatchObject({ name: 'Riya Sharma', message: 'Congrats!', events: ['Wedding Ceremony'], invite: 'wedding' });
+    expect(saved.name).toBe('Riya Sharma');
+    vi.unstubAllGlobals();
+  });
+
+  it('fails loudly when the sheet says no', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ok: false, error: 'busy' }) }));
+    await expect(submitRsvp(entry, 'https://example.test')).rejects.toThrow(/busy/);
+    vi.unstubAllGlobals();
   });
 });
 
@@ -75,7 +106,6 @@ describe('config', () => {
       expect(e.start).toMatch(/^\d{2}:\d{2}$/);
       expect(config.venues[e.venue], `venue for ${e.id}`).toBeTruthy();
       expect(typeof e.show).toBe('boolean');
-      expect(['dawn', 'haldi', 'rani', 'agni', 'night'], `theme for ${e.id}`).toContain(e.theme);
       ids.add(e.id);
     }
     expect(ids.has(config.headline)).toBe(true);

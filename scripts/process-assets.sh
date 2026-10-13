@@ -55,14 +55,6 @@ ff -i $DL/textures/Fabric030/Fabric030_1K-JPG_Color.jpg \
    -vf "format=gray,scale=512:512,normalize=blackpt=0x9a9a9a:whitept=white" $TMP/canvas.png
 webp $TMP/canvas.png $OUT/img/canvas-weave.webp 70
 
-echo "• celebration backdrops"
-# 1 Dec: real bandhani tie-dye, recoloured to rani pink and softened
-ff -i $DL/textures/bandhani.jpg -vf "crop=ih*0.5625:ih,scale=540:960,hue=h=80:s=1.5,eq=brightness=0.02:contrast=0.95:gamma=1.08,gblur=sigma=0.8" $TMP/bandhani.png
-webp $TMP/bandhani.png $OUT/img/bg-bandhani.webp 62
-# 26 Nov: strands of marigold hung like a toran across the top
-ff -i $DL/textures/marigold-garland.jpg -vf "crop=iw:iw*0.62:0:ih*0.12,scale=720:-2" $TMP/marigold.png
-webp $TMP/marigold.png $OUT/img/bg-marigold.webp 64
-
 echo "• hands frame sequence"
 # One full cycle of the alta animation (plain palms → alta → dots linking palms)
 rm -f $OUT/seq/hands/*.webp
@@ -100,7 +92,6 @@ clip $DL/clips/gold-glitter.mp4 $OUT/video/gold-dust.mp4   "crop=405:720:437:0,s
 clip $DL/clips/fireworks.mp4    $OUT/video/fireworks.mp4   "crop=405:720:437:0,scale=540:960" 0 10
 clip $DL/clips/sparks.mp4       $OUT/video/sparks.mp4      "crop=608:1080:656:0,scale=540:960" 2 6
 clip $DL/clips/mist.mp4         $OUT/video/mist.mp4        "scale=960:540,eq=brightness=-0.15:contrast=1.3" 0 8
-clip $DL/clips/fire-vertical.mp4 $OUT/video/fire.mp4     "scale=540:960,curves=all='0/0 0.18/0 1/1'" 1 8
 # multiply-blend clips (white = transparent)
 clip $DL/clips/ink-red-bleed.mp4 $OUT/video/alta-bleed.mp4 "crop=608:1080:656:0,scale=540:960,curves=all='0/0 0.75/0.8 0.86/1 1/1'" 0 6
 clip $DL/clips/birds.mp4        $OUT/video/birds.mp4       "format=gray,crop=iw:ih*0.62:0:0,curves=all='0/0 0.45/0.25 0.62/1 1/1',scale=960:-2,format=yuv420p" 4 10

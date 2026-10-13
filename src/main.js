@@ -14,6 +14,7 @@ import Lenis from 'lenis';
 
 import config from './config.js';
 import { resolveInvite } from './lib/invite.js';
+import { createAttending } from './lib/attending.js';
 import { h } from './lib/dom.js';
 import { reducedMotion, lowPower } from './lib/motion.js';
 import { preloadInk } from './lib/inkMask.js';
@@ -42,22 +43,25 @@ async function start() {
   const petalCanvas = h('canvas', { class: 'petals', 'aria-hidden': 'true' });
   document.body.append(petalCanvas);
 
+  const invite = resolveInvite(config, location.search);
   const ctx = {
     config,
-    invite: resolveInvite(config, location.search),
+    invite,
+    attending: createAttending(invite.events.map((e) => e.id)),
     reduced: reducedMotion,
     lowPower,
     petals: createPetals(petalCanvas),
     music: createMusic(config.music),
   };
 
-  const lenis = reducedMotion ? null : new Lenis({ lerp: 0.085, wheelMultiplier: 0.9 });
+  const lenis = reducedMotion ? null : new Lenis({ lerp: 0.1, wheelMultiplier: 1 });
   if (lenis) {
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((t) => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
     lenis.stop();
   }
+  ctx.lenis = lenis;
 
   // Sound toggle
   const soundBtn = h('button', { class: 'sound', type: 'button', 'aria-label': 'Music', 'aria-pressed': 'false', hidden: true });

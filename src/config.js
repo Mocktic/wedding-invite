@@ -32,9 +32,7 @@ export default {
   // Every event. `show: true/false` decides what the default link (no ?invite=) shows.
   // date: YYYY-MM-DD · start/end: 24-hour HH:MM, Indian Standard Time · venue: a key from `venues`
   // image: painting shown on the day's card (public/assets/img)
-  // theme: backdrop behind that day's card (the day's first event decides):
-  //   'dawn' (marigold toran) · 'haldi' (turmeric + henna) · 'rani' (pink bandhani)
-  //   'agni' (sacred fire) · 'night' (stars)
+  // The sky behind each day's card follows the time of its events automatically.
   events: [
     {
       id: 'ganesh',
@@ -46,7 +44,6 @@ export default {
       venue: 'residence',
       note: 'We begin by seeking Lord Ganesha’s blessings.',
       image: 'roundel-ganesh.webp',
-      theme: 'dawn',
     },
     {
       id: 'haldi',
@@ -58,7 +55,6 @@ export default {
       venue: 'rtdcAjmer',
       note: 'Turmeric, henna and a lot of laughter.',
       image: 'roundel-haldi.webp',
-      theme: 'haldi',
     },
     {
       id: 'engagement',
@@ -70,7 +66,6 @@ export default {
       venue: 'badiSadri',
       note: 'Rings are exchanged and a promise is made.',
       image: 'roundel-engagement.webp',
-      theme: 'rani',
     },
     {
       id: 'baraat',
@@ -82,7 +77,6 @@ export default {
       venue: 'badiSadri',
       note: 'The groom arrives with music and dance, and garlands are exchanged.',
       image: 'roundel-baraat.webp',
-      theme: 'rani',
     },
     {
       id: 'lagan',
@@ -95,7 +89,6 @@ export default {
       venue: 'badiSadri',
       note: 'Seven vows around the sacred fire.',
       image: 'roundel-pheras.webp',
-      theme: 'agni',
     },
     {
       id: 'reception',
@@ -107,7 +100,6 @@ export default {
       venue: 'rtdcAjmer',
       note: 'An evening of dinner, music and celebration.',
       image: 'roundel-dinner.webp',
-      theme: 'night',
     },
   ],
 
@@ -137,7 +129,8 @@ export default {
   },
 
   rsvp: {
-    // Set to a URL later (Google Apps Script, Formspree, your API…) to store responses.
-    endpoint: null,
+    // Google Apps Script web app (scripts/rsvp-apps-script.gs) → rows in the RSVP Google Sheet.
+    // null = keep RSVPs only in the guest's browser (handy for testing).
+    endpoint: 'https://script.google.com/macros/s/AKfycbwT0SRyM5UQXaihBD2qsQ1nVW-8LP64LjIm0wlSZyesqz3UM3ZFaNZ5Me5EDO-uiRd6zQ/exec',
   },
 };

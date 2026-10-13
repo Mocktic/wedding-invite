@@ -21,9 +21,7 @@ It is set to `noindex` so search engines stay out. Only people with the link wil
 
 Everything editable lives in **`src/config.js`**:
 - **venues**: name, address, Google Maps link (no link → no directions button)
-- **events**: title, optional subtitle, date, start/end (24-hour, IST), venue, one line, painting, and a
-  `theme` for that day's backdrop: `dawn` (marigold toran), `haldi` (turmeric + henna), `rani` (pink bandhani),
-  `agni` (sacred fire), `night` (stars)
+- **events**: title, optional subtitle, date, start/end (24-hour, IST), venue, one line, painting
 - **headline**: which event gets the big "Save the Date", the countdown and the place scene
 - "Good to know" notes, music file, RSVP endpoint
 
@@ -56,10 +54,28 @@ Anyone who edits the link by hand could see another preset, so treat presets as 
 
 ## RSVP data
 
-The form collects **name** (required) and **message** (optional), plus the invite preset.
-Until `config.rsvp.endpoint` is set, each entry is kept in the guest's browser and logged to the console.
-Set `endpoint` to any URL that accepts a JSON `POST` `{ name, message, invite, at }`
-(for example a Google Apps Script web app, Formspree or Supabase) and it will be stored there.
+The form collects **name** (required), **events attending** (at least one; pre-filled from the events
+the guest tapped on the cards, editable in the form) and **message** (optional), plus the invite preset.
+Until `config.rsvp.endpoint` is set, entries are kept in the guest's browser and logged to the console.
+
+### RSVPs into Google Sheets
+
+1. Create an empty Google Sheet. **File → Settings → Time zone → (GMT+05:30) India Standard Time.**
+2. **Extensions → Apps Script**, replace the sample code with `scripts/rsvp-apps-script.gs`, **Save**.
+3. **Deploy → New deployment → Web app** · Execute as: **Me** · Who has access: **Anyone** → **Deploy**,
+   then authorize (Advanced → Go to … → Allow; it is your own script).
+4. Copy the **Web app URL** (`https://script.google.com/macros/s/…/exec`) into `config.rsvp.endpoint`.
+
+Leave the sheet empty: on the first RSVP the script creates
+- **RSVPs**: Submitted at · Name · Events attending (`A | B | C`) · Message · Invite link
+- **Summary**: every event with a live count (`=COUNTIF(RSVPs!C:C,"*Event name*")`)
+
+To see who is coming to one event, filter the "Events attending" column by *Text contains* that event's full name.
+
+Privacy: keep the sheet's sharing on **Restricted**. The web app only *adds* rows and never returns sheet
+data, so the public link can't be used to read anything. A hidden anti-bot field, a per-minute limit and
+formula-injection escaping guard against junk. After editing the script, use **Deploy → Manage deployments →
+Edit → New version** so the URL stays the same.
 
 ## The film, scene by scene
 
@@ -68,7 +84,7 @@ Set `endpoint` to any URL that accepts a JSON `POST` `{ name, message, invite, a
 | 0 | Unveil | Alta dot on raw canvas, शुभ विवाह. Tapping bleeds red ink across the screen and starts the music |
 | 1–2 | Hands → Names (one pinned shot) | The painted alta animation plays with scroll, the camera pushes into the dots and the thread runs out. The names' paper floods in over the hands while *Aditi* starts painting; the thread underlines her name, loops round the "&", runs down the margin past *Yashwant*, underlines his name and rests on a bead |
 | 3 | Place & date | A pen sketch of a Rajasthani lake palace fills with watercolour (headline venue), the sun sets over it (headline date), palace lights and stars come on (countdown, Add to Calendar) |
-| 4 | The Celebrations | A deck of function cards, one per day, in a single pinned screen. Each scroll step peels the top card away while an ink wash changes the backdrop to suit the next day. The thread ties the deck's corner and the last card turns over to show "Good to know". Each flick settles on a card |
+| 4 | The Celebrations | A deck of function cards, one per day, in a single pinned screen. Each scroll step peels the top card away while the sky drifts to the hour of the next day's events (dawn, afternoon, sunset, night). Tapping an event marks it "attending". The thread ties the deck's corner and the last card turns over to show "Good to know". Each flick settles on a card |
 | 5 | RSVP | The thread ties a knot, then a paper card. Sending it flips the card and sets off petals, fireworks and sparks |
 
 Reduced-motion users get the same content without pinning or scrubbing. Low-power or data-saver
@@ -97,8 +113,7 @@ the IDs below if you need to rebuild.
 |---|---|
 | Alta hands animation, sepia Lake Pichola painting | provided |
 | Miniatures: *Wedding Procession of Rama* (Mewar Ramayana), *Marriage of Krishna and Rukmini* (Bikaner, Google Art Project), *Maharana Ari Singh at the Jagniwas Water Palace, 1767* (Met), *Maharana Ari Singh and his consort on a terrace* (Cleveland Museum of Art), *Ganesha with Riddhi and Siddhi* (Guler, late 18th c.) | Wikimedia Commons, public domain |
-| Ink clips 470, 3995 (masks), 41999 (red bleed); gold glitter 46317; mist 50936; fire 52284; fireworks 45739; sparks 683; birds 9782 | Mixkit (free licence) |
-| *Bandhani print* (recoloured), *Marigold Garland, Kolkata* | Wikimedia Commons |
+| Ink clips 470, 3995 (masks), 41999 (red bleed); gold glitter 46317; mist 50936; fireworks 45739; sparks 683; birds 9782 | Mixkit (free licence) |
 | Music: "India" (track 21) | Mixkit (free licence). Swap `public/assets/audio/music.mp3` for your own song |
 | Paper001, Fabric030 textures | ambientCG (CC0) |
 | Icons | Phosphor Icons (MIT) |

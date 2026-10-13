@@ -28,15 +28,52 @@ export function rsvp(app, ctx) {
   const nameError = h('p', { class: 'field__error', id: 'rsvp-name-error', 'aria-live': 'polite' });
   const message = h('textarea', { id: 'rsvp-message', name: 'message', rows: 4, maxlength: MESSAGE_LIMIT, placeholder: 'A wish, a memory, a blessing…' });
   const submit = h('button', { class: 'button', type: 'submit' }, h('span', {}, 'Send your blessings'));
+
+  // Events attending: mirrors what the guest tapped on the cards above, and can be changed here.
+  const { attending } = ctx;
+  const events = ctx.invite.events;
+  const chips = events.map((e) => {
+    const chip = h('button', { class: 'pick-chip', type: 'button', 'aria-pressed': 'false', 'data-event': e.id },
+      h('span', { class: 'pick-chip__tick', 'aria-hidden': 'true' }),
+      h('span', { class: 'pick-chip__text' },
+        h('b', {}, e.title),
+        h('small', {}, `${e.dayParts.day} ${e.dayParts.month.slice(0, 3)} · ${e.time}`)));
+    chip.addEventListener('click', () => attending.toggle(e.id));
+    return chip;
+  });
+  const pickedNote = h('p', { class: 'field__hint', 'aria-live': 'polite' });
+  const eventsError = h('p', { class: 'field__error', id: 'rsvp-events-error', 'aria-live': 'polite' });
+  const formError = h('p', { class: 'field__error form__error', 'aria-live': 'polite' });
+  // Honeypot: invisible to people, tempting to bots. The sheet ignores anything that fills it.
+  const honeypot = h('input', { type: 'text', name: 'website', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' });
+  const renderPicks = () => {
+    chips.forEach((c) => {
+      const on = attending.has(c.dataset.event);
+      c.classList.toggle('is-on', on);
+      c.setAttribute('aria-pressed', String(on));
+    });
+    const n = attending.list().length;
+    pickedNote.textContent = n ? `${n} of ${events.length} selected` : 'Tap the events you’ll attend.';
+    if (n) eventsError.textContent = '';
+  };
+  attending.onChange(renderPicks);
+  renderPicks();
   const form = h('form', { class: 'card__face card__front', novalidate: true },
     h('p', { class: 'card__eyebrow eyebrow' }, 'Kindly reply'),
     h('div', { class: 'field' },
       h('label', { for: 'rsvp-name' }, 'Name'),
       nameInput,
       nameError),
+    h('div', { class: 'field', role: 'group', 'aria-labelledby': 'rsvp-events-label', 'aria-describedby': 'rsvp-events-error' },
+      h('p', { class: 'field__label', id: 'rsvp-events-label' }, 'Events you’ll attend'),
+      h('div', { class: 'pick-chips' }, ...chips),
+      pickedNote,
+      eventsError),
     h('div', { class: 'field' },
       h('label', { for: 'rsvp-message' }, 'Message ', h('span', { class: 'field__optional' }, '(optional)')),
       message),
+    h('div', { class: 'hp', 'aria-hidden': 'true' }, honeypot),
+    formError,
     submit,
   );
 
@@ -94,25 +131,40 @@ export function rsvp(app, ctx) {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = { name: nameInput.value, message: message.value, invite: ctx.invite.name };
+    formError.textContent = '';
+    const data = {
+      name: nameInput.value,
+      message: message.value,
+      events: attending.list().map((id) => events.find((ev) => ev.id === id).title),
+      invited: events.map((ev) => ev.title),
+      invite: ctx.invite.name,
+      website: honeypot.value,
+    };
     const errors = validateRsvp(data);
-    if (errors.name) { showError(errors.name); nameInput.focus(); return; }
+    showError(errors.name);
+    eventsError.textContent = errors.events || '';
+    if (errors.events) gsap.fromTo(chips, { x: -5 }, { x: 0, duration: 0.5, stagger: 0.03, ease: 'elastic.out(1, 0.3)' });
+    if (errors.name) { nameInput.focus(); return; }
+    if (errors.events) { chips[0].focus(); return; }
     submit.disabled = true;
     submit.classList.add('is-sending');
     try {
       const entry = await submitRsvp(data, config.rsvp.endpoint);
-      celebrate(entry.name.split(' ')[0]);
+      celebrate(entry.name.split(' ')[0], entry.events.length);
     } catch (err) {
       console.error(err);
-      showError('Something went wrong, please try again.');
+      formError.textContent = /busy/.test(err.message)
+        ? 'Lots of blessings arriving at once. Please try again in a minute.'
+        : 'Couldn’t send that. Please check your connection and try again.';
       submit.disabled = false;
       submit.classList.remove('is-sending');
     }
   });
 
-  function celebrate(firstName) {
+  function celebrate(firstName, eventCount) {
     const thanks = brushText(thanksSvg, { text: `Thank you, ${firstName}`, x: 160, y: 78, size: 44, className: 'card__thanks' });
-    thanksLine.textContent = `Your blessings are on their way to ${bride} & ${groom}.`;
+    const noted = eventCount ? ` We’ve noted ${eventCount === 1 ? 'the event' : `the ${eventCount} events`} you’ll attend.` : '';
+    thanksLine.textContent = `Your blessings are on their way to ${bride} & ${groom}.${noted}`;
     const r = card.getBoundingClientRect();
     const tl = gsap.timeline();
     tl.to(card, { rotateY: 180, duration: 1.1, ease: 'power3.inOut' }, 0)

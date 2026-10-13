@@ -429,87 +429,34 @@ button, input, textarea { font: inherit; color: inherit; }
 /* ─────────────── 4 · The Celebrations (function cards) ─────────────── */
 .celebrations {
   --cel-ink: #f7e9d2;
+  --cel-ink-low: #f7e9d2;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: var(--night);
 }
-.cel-bgs, .cel-bg { position: absolute; inset: 0; }
-.cel-bg { overflow: hidden; }
-
-.cel-bg--dawn { background: linear-gradient(to bottom, #fbe6c6 0%, #f7cfae 50%, #efab92 100%); }
-.cel-bg__marigold {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 9%;
-  background: url('/assets/img/bg-marigold.webp') center 30% / cover;
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
-  mask-image: linear-gradient(to bottom, #000 55%, transparent);
-}
-.toran { position: absolute; top: 4.5%; left: 0; width: 100%; height: 7%; }
-.toran__string { fill: none; stroke: #5b7a2e; stroke-width: 1.2; }
-.toran__marigold { fill: #f6a91c; }
-.toran__marigold--deep { fill: #e36f0d; }
-.toran__leaf { fill: #4f7d2a; }
-
-.cel-bg--haldi {
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' fill='none' stroke='%23305a1c' stroke-opacity='0.22' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M38 30c14-2 22 10 16 20s-22 8-20-4c1-8 10-9 12-3'/%3E%3Cpath d='M54 50c6 6 6 16-2 22'/%3E%3Ccircle cx='30' cy='22' r='1.6'/%3E%3Ccircle cx='24' cy='30' r='1.4'/%3E%3Ccircle cx='26' cy='40' r='1.2'/%3E%3Cpath d='M92 78c-12 2-20-8-15-17s19-7 18 3c-1 7-9 8-10 3'/%3E%3Cpath d='M78 62c-5-5-5-13 1-18'/%3E%3Ccircle cx='99' cy='86' r='1.6'/%3E%3Ccircle cx='104' cy='78' r='1.3'/%3E%3Cpath d='M10 96c8-6 16-6 22 0M14 102c6-4 12-4 16 0'/%3E%3Cpath d='M84 14c6 4 12 4 18 0'/%3E%3C/svg%3E") 0 0 / 92px,
-    radial-gradient(ellipse at 50% 35%, #fde79a 0%, #f4cb52 55%, #e4a92a 100%);
-  background-blend-mode: multiply, normal;
-}
-.cel-bg--haldi::after {
-  content: '';
+/* one sky for every day; its colours follow the hour of each day's events */
+.cel-sky {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 55%, rgba(255, 246, 214, 0.55) 0%, rgba(255, 246, 214, 0) 60%);
+  background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-bottom) 100%);
 }
-
-.cel-bg--rani { background: url('/assets/img/bg-bandhani.webp') center / cover, #9c1d4f; }
-.cel-bg__shade {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(70, 0, 24, 0.6) 0%, rgba(70, 0, 24, 0) 32%),
-    radial-gradient(ellipse at 50% 55%, rgba(70, 0, 24, 0.1) 0%, rgba(70, 0, 24, 0.55) 100%);
-}
-
-.cel-bg--agni { background: radial-gradient(ellipse at 50% 118%, #ffb347 0%, #e0542a 22%, #9b1b1f 50%, #4a0d14 80%, #2a070c 100%); }
-.cel-bg__glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 170, 70, 0.45), transparent 60%);
-  animation: firelight 2.6s ease-in-out infinite alternate;
-}
-@keyframes firelight { from { opacity: 0.55; } to { opacity: 1; } }
-.cel-bg__fire {
-  left: 0; bottom: -4%;
-  width: 100%; height: 52%;
-  opacity: 0.6;
-  -webkit-mask-image: linear-gradient(to top, #000 40%, transparent);
-  mask-image: linear-gradient(to top, #000 40%, transparent);
-}
-
-.cel-bg--night { background: radial-gradient(ellipse at 50% 0%, #1c2346 0%, transparent 60%), linear-gradient(to bottom, #0e1327 0%, var(--night) 45%, #1a1430 100%); }
-.cel-bg__stars {
+.cel-stars {
   position: absolute;
   top: 0; left: 0;
   width: 1px; height: 1px;
   border-radius: 50%;
+  opacity: var(--stars, 0);
   animation: twinkle 4s ease-in-out infinite alternate;
 }
-.cel-bg__dust { inset: 0; width: 100%; height: 100%; opacity: 0.35; }
 
 .cel-header {
   position: relative;
   z-index: 2;
   text-align: center;
-  padding: max(10svh, 4.2rem) 1.25rem 0; /* clears the dawn toran; same on every day so the deck never jumps */
+  padding: max(5.5svh, 1.6rem) 1.25rem 0;
   color: var(--cel-ink);
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.22);
 }
-.celebrations[data-theme='dawn'] .cel-header,
-.celebrations[data-theme='haldi'] .cel-header { text-shadow: 0 0 18px rgba(255, 244, 222, 0.9); }
 .cel-header__deva { margin: 0; font-family: var(--font-deva); font-size: 1.05rem; opacity: 0.9; }
 .cel-header__title { font-size: clamp(2.4rem, 11vw, 3rem); margin: 0 0 0.35rem; }
 
@@ -574,17 +521,54 @@ button, input, textarea { font: inherit; color: inherit; }
 }
 .fn-card__arch-line { position: absolute; inset: -5px; width: calc(100% + 10px); height: calc(100% + 10px); overflow: visible; }
 .fn-card__arch-line path { fill: none; stroke: var(--gold); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
-.fn-card__events { display: grid; gap: 0.85rem; }
-.fn-event + .fn-event { border-top: 1px dashed rgba(184, 137, 59, 0.55); padding-top: 0.85rem; }
+.fn-card__events { display: grid; gap: 0.9rem; }
+.fn-event {
+  position: relative;
+  margin: 0 -0.55rem;
+  padding: 0.55rem 0.55rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+.fn-event.is-picked { background: rgba(179, 32, 42, 0.07); box-shadow: inset 0 0 0 1px rgba(179, 32, 42, 0.28); }
+.fn-event + .fn-event::before {
+  content: '';
+  position: absolute;
+  top: -0.45rem;
+  left: 0.55rem;
+  right: 0.55rem;
+  border-top: 1px dashed rgba(184, 137, 59, 0.55);
+}
+.fn-event__pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0.15rem auto 0;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid rgba(179, 32, 42, 0.55);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--alta);
+  cursor: pointer;
+}
+.fn-event__pick span { font-size: 0.95rem; line-height: 1; letter-spacing: 0; }
+.fn-event.is-picked .fn-event__pick { background: var(--alta); border-color: var(--alta); color: #fff4e4; box-shadow: 0 4px 12px rgba(179, 32, 42, 0.3); }
 .fn-event > * { margin: 0; }
 .fn-event__time { font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 0.1em; color: var(--kumkum); }
 .fn-event__title { margin-top: 0.1rem; font-weight: 600; font-size: 1.32rem; line-height: 1.15; }
 .fn-event__subtitle { font-family: var(--font-script); font-size: 1.35rem; line-height: 1.1; color: var(--gold); }
-.fn-event__note { margin: 0.2rem 0 0.5rem; font-style: italic; font-size: 0.98rem; line-height: 1.3; opacity: 0.8; }
+.fn-event__note { margin: 0.2rem 0 0.55rem; font-style: italic; font-size: 0.98rem; line-height: 1.3; opacity: 0.8; }
 .fn-event__venue {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  margin-bottom: 0.45rem;
   padding: 0.25rem 0.8rem 0.25rem 0.55rem;
   border: 1px solid rgba(110, 20, 35, 0.4);
   border-radius: 999px;
@@ -604,19 +588,23 @@ button, input, textarea { font: inherit; color: inherit; }
 .fn-notes span { font-size: 1.02rem; line-height: 1.35; }
 .fn-notes__hashtag { margin: 0; font-size: 0.8rem; letter-spacing: 0.2em; color: var(--gold); }
 
-.fn-beads {
+.fn-foot {
   position: relative;
   z-index: 2;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.8rem 0 calc(max(4svh, 1rem) + env(safe-area-inset-bottom));
+  gap: 0.55rem;
+  padding: 0.6rem 0 calc(max(3.5svh, 0.9rem) + env(safe-area-inset-bottom));
+  color: var(--cel-ink-low);
 }
+.fn-hint { margin: 0; font-style: italic; font-size: 0.98rem; opacity: 0.9; }
+.fn-beads { display: flex; align-items: center; gap: 0.6rem; }
 .fn-beads span {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1px solid var(--cel-ink);
+  border: 1px solid currentColor;
   opacity: 0.7;
   transition: transform 0.3s var(--ease-out), background-color 0.3s, border-color 0.3s, opacity 0.3s;
 }
@@ -629,7 +617,6 @@ button, input, textarea { font: inherit; color: inherit; }
 
 /* reduced motion: cards simply stack down the page */
 .celebrations.is-static { height: auto; padding-bottom: 3rem; }
-.is-static .cel-bg:not(:last-child) { display: none; }
 .is-static .fn-stage { flex: none; padding-top: 1.5rem; }
 .is-static .fn-deck { height: auto !important; transform: none !important; display: grid; gap: 1.5rem; }
 .is-static .fn-card { position: relative; inset: auto; }
@@ -637,6 +624,8 @@ button, input, textarea { font: inherit; color: inherit; }
 .is-static .fn-card__face { grid-area: auto; }
 .is-static .fn-card__back { transform: none; }
 .is-static .fn-beads, .is-static .cel-thread { display: none; }
+.is-static .cel-sky { background: linear-gradient(to bottom, #0e1327, var(--night) 45%, #1a1430); }
+.is-static .cel-header, .is-static .fn-foot { color: var(--ivory); }
 
 /* ─────────────── 5 · RSVP ─────────────── */
 .rsvp {
@@ -700,6 +689,48 @@ button, input, textarea { font: inherit; color: inherit; }
   text-transform: uppercase;
   color: var(--kumkum);
 }
+.field__label {
+  margin: 0 0 0.45rem;
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kumkum);
+}
+.pick-chips { display: grid; gap: 0.45rem; }
+.pick-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(74, 52, 38, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.35);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.pick-chip__tick {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1.5px solid rgba(110, 20, 35, 0.45);
+  border-radius: 50%;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+.pick-chip__text { display: flex; flex-direction: column; line-height: 1.2; }
+.pick-chip__text b { font-weight: 600; font-size: 1.05rem; color: var(--ink); }
+.pick-chip__text small { font-size: 0.85rem; opacity: 0.7; }
+.pick-chip:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
+.pick-chip.is-on { border-color: rgba(179, 32, 42, 0.6); background: rgba(179, 32, 42, 0.07); }
+.pick-chip.is-on .pick-chip__tick { background: var(--alta); border-color: var(--alta); }
+.pick-chip.is-on .pick-chip__tick::after { content: '✓'; color: #fff4e4; font-size: 0.8rem; line-height: 1; }
+.form__error { margin: -0.2rem 0 0.4rem; text-align: center; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.field__hint { margin: 0.4rem 0 0; font-style: italic; font-size: 0.92rem; opacity: 0.7; }
 .field__optional { font-weight: 400; letter-spacing: 0.05em; text-transform: none; font-style: italic; font-size: 0.9rem; opacity: 0.75; }
 .field input, .field textarea {
   display: block;
