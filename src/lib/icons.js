@@ -5,5 +5,6 @@ import map from '@phosphor-icons/core/assets/thin/map-pin-thin.svg?raw';
 import calendar from '@phosphor-icons/core/assets/thin/calendar-plus-thin.svg?raw';
 import soundOn from '@phosphor-icons/core/assets/thin/speaker-high-thin.svg?raw';
 import soundOff from '@phosphor-icons/core/assets/thin/speaker-slash-thin.svg?raw';
+import finger from '@phosphor-icons/core/assets/light/hand-tap-light.svg?raw';
 
-export const icons = { dress, wind, map, calendar, soundOn, soundOff };
+export const icons = { dress, wind, map, calendar, soundOn, soundOff, finger };

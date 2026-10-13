@@ -20,6 +20,7 @@ import { preloadInk } from './lib/inkMask.js';
 import { createPetals } from './lib/petals.js';
 import { createMusic } from './lib/music.js';
 import { icons } from './lib/icons.js';
+import { scrollHint } from './lib/scrollHint.js';
 import { unveil } from './scenes/unveil.js';
 import { hands } from './scenes/hands.js';
 import { names } from './scenes/names.js';
@@ -96,6 +97,7 @@ async function start() {
       soundBtn.hidden = false;
       gsap.fromTo(soundBtn, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.6, ease: 'back.out(2)' });
       ScrollTrigger.refresh();
+      scrollHint(ctx).show(reducedMotion ? 0 : 1.1); // after the red ink has cleared
     },
   });
 }
