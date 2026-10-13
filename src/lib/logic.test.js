@@ -75,6 +75,7 @@ describe('config', () => {
       expect(e.start).toMatch(/^\d{2}:\d{2}$/);
       expect(config.venues[e.venue], `venue for ${e.id}`).toBeTruthy();
       expect(typeof e.show).toBe('boolean');
+      expect(['dawn', 'haldi', 'rani', 'agni', 'night'], `theme for ${e.id}`).toContain(e.theme);
       ids.add(e.id);
     }
     expect(ids.has(config.headline)).toBe(true);

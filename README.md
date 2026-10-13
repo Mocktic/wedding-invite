@@ -21,7 +21,9 @@ It is set to `noindex` so search engines stay out. Only people with the link wil
 
 Everything editable lives in **`src/config.js`**:
 - **venues**: name, address, Google Maps link (no link → no directions button)
-- **events**: title, optional subtitle, date, start/end (24-hour, IST), venue, one line, roundel image, effect
+- **events**: title, optional subtitle, date, start/end (24-hour, IST), venue, one line, painting, and a
+  `theme` for that day's backdrop: `dawn` (marigold toran), `haldi` (turmeric + henna), `rani` (pink bandhani),
+  `agni` (sacred fire), `night` (stars)
 - **headline**: which event gets the big "Save the Date", the countdown and the place scene
 - "Good to know" notes, music file, RSVP endpoint
 
@@ -66,7 +68,7 @@ Set `endpoint` to any URL that accepts a JSON `POST` `{ name, message, invite, a
 | 0 | Unveil | Alta dot on raw canvas, शुभ विवाह. Tapping bleeds red ink across the screen and starts the music |
 | 1–2 | Hands → Names (one pinned shot) | The painted alta animation plays with scroll, the camera pushes into the dots and the thread runs out. The names' paper floods in over the hands while *Aditi* starts painting; the thread underlines her name, loops round the "&", runs down the margin past *Yashwant*, underlines his name and rests on a bead |
 | 3 | Place & date | A pen sketch of a Rajasthani lake palace fills with watercolour (headline venue), the sun sets over it (headline date), palace lights and stars come on (countdown, Add to Calendar) |
-| 4 | The Celebrations | Night. Events grouped by day. The thread winds between miniature-painting roundels, with petals for Haldi and Varmala and diyas for Ganesh Sthapana and the Pheras |
+| 4 | The Celebrations | A deck of function cards, one per day, in a single pinned screen. Each scroll step peels the top card away while an ink wash changes the backdrop to suit the next day. The thread ties the deck's corner and the last card turns over to show "Good to know". Each flick settles on a card |
 | 5 | RSVP | The thread ties a knot, then a paper card. Sending it flips the card and sets off petals, fireworks and sparks |
 
 Reduced-motion users get the same content without pinning or scrubbing. Low-power or data-saver
@@ -95,7 +97,8 @@ the IDs below if you need to rebuild.
 |---|---|
 | Alta hands animation, sepia Lake Pichola painting | provided |
 | Miniatures: *Wedding Procession of Rama* (Mewar Ramayana), *Marriage of Krishna and Rukmini* (Bikaner, Google Art Project), *Maharana Ari Singh at the Jagniwas Water Palace, 1767* (Met), *Maharana Ari Singh and his consort on a terrace* (Cleveland Museum of Art), *Ganesha with Riddhi and Siddhi* (Guler, late 18th c.) | Wikimedia Commons, public domain |
-| Ink clips 470, 3995 (masks), 41999 (red bleed); gold glitter 46317; mist 50936; candle 6925; fireworks 45739; sparks 683; birds 9782 | Mixkit (free licence) |
+| Ink clips 470, 3995 (masks), 41999 (red bleed); gold glitter 46317; mist 50936; fire 52284; fireworks 45739; sparks 683; birds 9782 | Mixkit (free licence) |
+| *Bandhani print* (recoloured), *Marigold Garland, Kolkata* | Wikimedia Commons |
 | Music: "India" (track 21) | Mixkit (free licence). Swap `public/assets/audio/music.mp3` for your own song |
 | Paper001, Fabric030 textures | ambientCG (CC0) |
 | Icons | Phosphor Icons (MIT) |

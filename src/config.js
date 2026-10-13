@@ -31,7 +31,10 @@ export default {
 
   // Every event. `show: true/false` decides what the default link (no ?invite=) shows.
   // date: YYYY-MM-DD · start/end: 24-hour HH:MM, Indian Standard Time · venue: a key from `venues`
-  // image: file in public/assets/img · effect: 'petals' | 'flame' | null
+  // image: painting shown on the day's card (public/assets/img)
+  // theme: backdrop behind that day's card (the day's first event decides):
+  //   'dawn' (marigold toran) · 'haldi' (turmeric + henna) · 'rani' (pink bandhani)
+  //   'agni' (sacred fire) · 'night' (stars)
   events: [
     {
       id: 'ganesh',
@@ -43,7 +46,7 @@ export default {
       venue: 'residence',
       note: 'We begin by seeking Lord Ganesha’s blessings.',
       image: 'roundel-ganesh.webp',
-      effect: 'flame',
+      theme: 'dawn',
     },
     {
       id: 'haldi',
@@ -55,7 +58,7 @@ export default {
       venue: 'rtdcAjmer',
       note: 'Turmeric, henna and a lot of laughter.',
       image: 'roundel-haldi.webp',
-      effect: 'petals',
+      theme: 'haldi',
     },
     {
       id: 'engagement',
@@ -67,7 +70,7 @@ export default {
       venue: 'badiSadri',
       note: 'Rings are exchanged and a promise is made.',
       image: 'roundel-engagement.webp',
-      effect: null,
+      theme: 'rani',
     },
     {
       id: 'baraat',
@@ -79,7 +82,7 @@ export default {
       venue: 'badiSadri',
       note: 'The groom arrives with music and dance, and garlands are exchanged.',
       image: 'roundel-baraat.webp',
-      effect: 'petals',
+      theme: 'rani',
     },
     {
       id: 'lagan',
@@ -92,7 +95,7 @@ export default {
       venue: 'badiSadri',
       note: 'Seven vows around the sacred fire.',
       image: 'roundel-pheras.webp',
-      effect: 'flame',
+      theme: 'agni',
     },
     {
       id: 'reception',
@@ -104,7 +107,7 @@ export default {
       venue: 'rtdcAjmer',
       note: 'An evening of dinner, music and celebration.',
       image: 'roundel-dinner.webp',
-      effect: null,
+      theme: 'night',
     },
   ],
 

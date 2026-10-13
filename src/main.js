@@ -25,7 +25,7 @@ import { unveil } from './scenes/unveil.js';
 import { hands } from './scenes/hands.js';
 import { namesLayer } from './scenes/names.js';
 import { udaipur } from './scenes/udaipur.js';
-import { day } from './scenes/day.js';
+import { celebrations } from './scenes/celebrations.js';
 import { rsvp } from './scenes/rsvp.js';
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
@@ -80,7 +80,7 @@ async function start() {
     ]).catch(() => {});
     const prologue = hands(app, ctx, { next: namesLayer(ctx) });
     udaipur(app, ctx);
-    day(app, ctx);
+    celebrations(app, ctx);
     rsvp(app, ctx);
     prologue.load();
     preloadInk();
