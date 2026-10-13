@@ -33,6 +33,13 @@ webp $TMP/r1.png $OUT/img/roundel-baraat.webp
 webp $TMP/r3.png $OUT/img/roundel-pheras.webp
 webp $TMP/r4.png $OUT/img/roundel-dinner.webp
 
+# Cover: bride and groom greeting with folded hands (already cut out). Crop to the figures
+# (a few px of padding) and size for phones; transparency kept.
+ff -i $SRC/provided/bride-namaste.png -vf "crop=481:1509:304:16,scale=-2:1000:flags=lanczos" $TMP/bride.png
+ff -i $SRC/provided/groom-namaste.png -vf "crop=476:1571:273:28,scale=-2:1041:flags=lanczos" $TMP/groom.png
+cwebp -quiet -q 82 -alpha_q 90 $TMP/bride.png -o $OUT/img/cover-bride.webp
+cwebp -quiet -q 82 -alpha_q 90 $TMP/groom.png -o $OUT/img/cover-groom.webp
+
 # Venue: colour painting + a sepia pencil-sketch version of the same painting
 ff -i $SRC/provided/lake-palace.png -vf "scale=1080:-2" $TMP/lake.png
 webp $TMP/lake.png $OUT/img/lake-palace.webp 80

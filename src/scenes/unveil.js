@@ -1,7 +1,8 @@
-// Scene 0 — a single alta dot on raw canvas. Tapping it bleeds red ink across the screen,
+// Scene 0 — the bride and groom greet the guest with folded hands below a single alta dot on
+// raw canvas. Tapping bleeds red ink across the screen (the couple fade away as it rises),
 // starts the music and lets the film begin.
 import gsap from 'gsap';
-import { h } from '../lib/dom.js';
+import { h, asset } from '../lib/dom.js';
 import { overlayVideo, playVideo } from '../lib/overlayVideo.js';
 import { inkMask } from '../lib/inkMask.js';
 
@@ -23,14 +24,37 @@ export function unveil(ctx, { onOpen }) {
     cta,
     h('p', { class: 'unveil__hint' }, 'Sound on, please'),
   );
+  const bride = h('img', { class: 'unveil__person unveil__person--bride', src: asset('img/cover-bride.webp'), alt: config.couple.bride, decoding: 'async' });
+  const groom = h('img', { class: 'unveil__person unveil__person--groom', src: asset('img/cover-groom.webp'), alt: config.couple.groom, decoding: 'async' });
+  const pair = h('div', { class: 'unveil__pair' }, bride, groom);
   const bleedWrap = h('div', { class: 'unveil__bleed-wrap' }, bleed);
-  const root = h('div', { class: 'unveil', role: 'dialog', 'aria-label': 'Wedding invitation' }, bleedWrap, content);
+  const root = h('div', { class: 'unveil', role: 'dialog', 'aria-label': 'Wedding invitation' }, bleedWrap, pair, content);
   const spread = inkMask(bleedWrap, 'blot');
   spread(0);
   document.body.append(root);
   cta.focus({ preventScroll: true });
 
+  // The couple take the space left below the text (never overlapping it), up to 46% of the screen.
+  const fitPair = () => {
+    const room = root.clientHeight - content.getBoundingClientRect().bottom - 10;
+    pair.style.height = `${Math.max(180, Math.min(root.clientHeight * 0.46, room))}px`;
+  };
+  fitPair();
+  new ResizeObserver(fitPair).observe(content); // re-fit when fonts land or the text reflows
+  window.addEventListener('resize', fitPair);
+
   gsap.from(content.children, { autoAlpha: 0, y: 14, duration: 1.1, stagger: 0.12, ease: 'power2.out', delay: 0.2 });
+  // The couple simply appear (gently). Add ?entrance=walk to the link to preview a version
+  // where they walk in from either side instead.
+  if (!ctx.reduced) {
+    if (new URLSearchParams(location.search).get('entrance') === 'walk') {
+      gsap.timeline({ delay: 0.5 })
+        .from(bride, { xPercent: -140, autoAlpha: 0, duration: 1.8, ease: 'power3.out' }, 0)
+        .from(groom, { xPercent: 140, autoAlpha: 0, duration: 1.8, ease: 'power3.out' }, 0.15);
+    } else {
+      gsap.from([bride, groom], { autoAlpha: 0, y: 18, duration: 1.4, stagger: 0.2, ease: 'power2.out', delay: 0.6 });
+    }
+  }
 
   let opened = false;
   function open() {
@@ -49,6 +73,8 @@ export function unveil(ctx, { onOpen }) {
     gsap.timeline({ onComplete: () => root.remove() })
       .to([...content.children].filter((el) => !el.contains(dot)), { autoAlpha: 0, y: -10, duration: 0.45, stagger: 0.03, ease: 'power2.in' }, 0)
       .to(dot, { scale: 1.6, duration: 0.5, ease: 'back.out(3)' }, 0)
+      // the couple fade away as the red starts to spread, gone before it reaches them
+      .to(pair, { autoAlpha: 0, y: 12, duration: 0.85, ease: 'power1.in' }, 0.25)
       .to(dot, { scale: 3, autoAlpha: 0, duration: 0.9, ease: 'power2.in' }, 0.5)
       .set(bleed, { autoAlpha: 1 }, 0.45)
       .to(ink, { p: 1, duration: 1.7, ease: 'power2.in', onUpdate: () => spread(ink.p) }, 0.45)
@@ -58,4 +84,5 @@ export function unveil(ctx, { onOpen }) {
   }
 
   root.addEventListener('click', open);
+  return { fit: fitPair };
 }

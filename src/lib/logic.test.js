@@ -114,6 +114,10 @@ describe('config', () => {
     }
   });
 
+  it('gives every venue a tagline for the place scene', () => {
+    for (const [key, v] of Object.entries(config.venues)) expect(v.tagline, key).toBeTruthy();
+  });
+
   it('headlines the Lagan Phere on 2 December', () => {
     const lagan = config.events.find((e) => e.id === config.headline);
     expect(lagan.date).toBe('2026-12-02');

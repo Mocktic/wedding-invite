@@ -8,22 +8,26 @@ export default {
     hashtag: '#AditiWedsYashwant',
   },
 
+  // tagline: the script line under "… will be held in" when this venue hosts the headline event
   venues: {
     residence: {
       name: 'Our Residence',
       city: 'home',
+      tagline: 'our home',
       address: 'Address to be shared', // PLACEHOLDER
       mapUrl: null, // PLACEHOLDER: paste a Google Maps link to show a directions button
     },
     badiSadri: {
       name: 'Badi Sadri',
       city: 'Badi Sadri',
+      tagline: 'the land of Mewar',
       address: 'Chittorgarh, Rajasthan',
       mapUrl: 'https://maps.google.com/?q=Badi+Sadri,+Rajasthan', // swap for the exact venue's link
     },
     rtdcAjmer: {
       name: 'RTDC Ajmer',
       city: 'Ajmer',
+      tagline: 'the city of Ajmer',
       address: 'Ajmer, Rajasthan',
       mapUrl: 'https://maps.google.com/?q=RTDC+Hotel+Ajmer', // swap for the exact venue's link
     },

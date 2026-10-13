@@ -88,7 +88,7 @@ export function udaipur(app, ctx) {
     : null;
   const venueCopy = h('div', { class: 'udaipur__copy udaipur__venue' },
     h('p', { class: 'eyebrow' }, main.subtitle ? `The ${main.subtitle} will be held in` : `The ${main.title} will be held in`),
-    h('p', { class: 'script udaipur__city' }, 'the heart of Rajasthan'),
+    h('p', { class: 'script udaipur__city' }, venue.tagline || `the city of ${venue.city}`),
     h('p', { class: 'udaipur__venue-name' }, venue.name),
     h('p', { class: 'udaipur__address' }, venue.address),
     mapLink,

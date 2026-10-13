@@ -17,8 +17,8 @@ export function hands(app, ctx, { next }) {
   const canvas = h('canvas', { class: 'hands__canvas', 'aria-hidden': 'true' });
   const frame = h('div', { class: 'hands__frame' }, canvas);
   const scrim = h('div', { class: 'hands__scrim' });
-  const captionA = h('p', { class: 'hands__caption' }, 'Every story begins', h('br'), 'with a little colour.');
-  const captionB = h('p', { class: 'hands__caption' }, 'Ours begins', h('br'), 'with ', h('em', {}, 'alta'), '.');
+  const captionA = h('p', { class: 'hands__caption' }, 'It was written', h('br'), 'in the lines of our palms,');
+  const captionB = h('p', { class: 'hands__caption' }, 'long before', h('br'), 'we met.');
   const svg = s('svg', { class: 'scene-svg', 'aria-hidden': 'true' });
   const wash = next.el; // the names scene is the paper that floods in
   wash.classList.add('hands__wash');

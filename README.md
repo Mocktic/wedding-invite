@@ -20,7 +20,8 @@ It is set to `noindex` so search engines stay out. Only people with the link wil
 ## Changing content
 
 Everything editable lives in **`src/config.js`**:
-- **venues**: name, address, Google Maps link (no link → no directions button)
+- **venues**: name, address, Google Maps link (no link → no directions button), and a `tagline`, the
+  script line in the place scene ("the land of Mewar")
 - **events**: title, optional subtitle, date, start/end (24-hour, IST), venue, one line, painting
 - **headline**: which event gets the big "Save the Date", the countdown and the place scene
 - "Good to know" notes, music file, RSVP endpoint
@@ -81,7 +82,7 @@ Edit → New version** so the URL stays the same.
 
 | # | Scene | What happens |
 |---|---|---|
-| 0 | Unveil | Alta dot on raw canvas, शुभ विवाह. Tapping bleeds red ink across the screen and starts the music |
+| 0 | Unveil | Alta dot on raw canvas with शुभ विवाह, names and date; below, Aditi and Yashwant stand side by side greeting with folded hands. Tapping fades them away as red ink bleeds across the screen, and starts the music. (Add `?entrance=walk` to the link to preview them walking in from either side.) |
 | 1–2 | Hands → Names (one pinned shot) | The painted alta animation plays with scroll, the camera pushes into the dots and the thread runs out. The names' paper floods in over the hands while *Aditi* starts painting; the thread underlines her name, loops round the "&", runs down the margin past *Yashwant*, underlines his name and rests on a bead |
 | 3 | Place & date | A pen sketch of a Rajasthani lake palace fills with watercolour (headline venue), the sun sets over it (headline date), palace lights and stars come on (countdown, Add to Calendar) |
 | 4 | The Celebrations | A deck of function cards, one per day, in a single pinned screen. Each scroll step peels the top card away while the sky drifts to the hour of the next day's events (dawn, afternoon, sunset, night). Tapping an event marks it "attending". The thread ties the deck's corner and the last card turns over to show "Good to know". Each flick settles on a card |
@@ -111,7 +112,7 @@ the IDs below if you need to rebuild.
 
 | Asset | Source |
 |---|---|
-| Alta hands animation, sepia Lake Pichola painting | provided |
+| Alta hands animation, sepia Lake Pichola painting, bride and groom namaste photos (cover) | provided |
 | Miniatures: *Wedding Procession of Rama* (Mewar Ramayana), *Marriage of Krishna and Rukmini* (Bikaner, Google Art Project), *Maharana Ari Singh at the Jagniwas Water Palace, 1767* (Met), *Maharana Ari Singh and his consort on a terrace* (Cleveland Museum of Art), *Ganesha with Riddhi and Siddhi* (Guler, late 18th c.) | Wikimedia Commons, public domain |
 | Ink clips 470, 3995 (masks), 41999 (red bleed); gold glitter 46317; mist 50936; fireworks 45739; sparks 683; birds 9782 | Mixkit (free licence) |
 | Music: "India" (track 21) | Mixkit (free licence). Swap `public/assets/audio/music.mp3` for your own song |
