@@ -85,7 +85,7 @@ All the options the invite understands. Combine them with `&` in any order, e.g.
 |---|---|---|---|
 | `invite` | `family` · `wedding` · `reception` · `after-party` · `wedding-after-party` · `reception-after-party` (any preset in config) | plain link | Which events this guest sees (see above) |
 | `autoplay` | `1` (any value except `0`) | off | **The film plays itself** after the tap at a calm pace. It rests on the painted names (about 2.5 s), on the night Save the Date (about 3.5 s), and on each event card (about 3.5 s) when the cards are switched on, then stops at the RSVP. A ❚❚/▶ button (bottom-left) pauses and resumes; any scroll, swipe or arrow key pauses it too. Ignored for guests whose phone asks for reduced motion |
-| `cover` | `video` | photos | **Preview:** the walking video (sky removed, meadow kept) on the opening screen instead of the two photos. It plays once and rests on its last frame |
+| `cover` | `video` · `meadow` | photos | **Preview:** `video` shows the walking video (sky removed, meadow kept) on the opening screen instead of the two photos; it plays once and rests on its last frame. `meadow` shows one photo of the two of them laughing and holding hands in the meadow, with the grass fading into the paper |
 | `entrance` | `walk` | fade in | **Preview:** the two cover photos glide in from either side instead of fading in (ignored with `cover=video`) |
 | `cards` | `1` | config | **Preview:** shows the event-card deck even though `sections.celebrations` is `false` in config |
 
@@ -117,6 +117,7 @@ Previews for the couple to compare (not for guests yet):
 | Preview | Link |
 |---|---|
 | Video cover | `https://your-site.vercel.app/?cover=video` |
+| Meadow photo cover | `https://your-site.vercel.app/?cover=meadow` |
 | Photos gliding in | `https://your-site.vercel.app/?entrance=walk` |
 | Event cards switched back on | `https://your-site.vercel.app/?cards=1` |
 | Everything together | `https://your-site.vercel.app/?invite=family&cover=video&cards=1&autoplay=1` |

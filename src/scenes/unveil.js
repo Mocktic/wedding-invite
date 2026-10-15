@@ -28,7 +28,8 @@ export function unveil(ctx, { onOpen }) {
   const groom = h('img', { class: 'unveil__person unveil__person--groom', src: asset('img/cover-groom.webp'), alt: config.couple.groom, decoding: 'async' });
   // PREVIEW: ?cover=video swaps the two photos for the walking clip (sky keyed out, meadow kept).
   // It plays once and rests on its last frame (them facing each other, holding hands).
-  const useVideo = new URLSearchParams(location.search).get('cover') === 'video';
+  const cover = new URLSearchParams(location.search).get('cover');
+  const useVideo = cover === 'video';
   const clip = useVideo
     ? h('video', {
       class: 'unveil__clip', muted: true, playsinline: true, autoplay: true, preload: 'auto',
@@ -39,7 +40,12 @@ export function unveil(ctx, { onOpen }) {
     h('source', { src: asset('video/cover-couple.webm'), type: 'video/webm; codecs="vp9"' }))
     : null;
   if (clip) clip.muted = true;
-  const pair = h('div', { class: `unveil__pair${clip ? ' unveil__pair--clip' : ''}` }, ...(clip ? [clip] : [bride, groom]));
+  // PREVIEW: ?cover=meadow shows one photo of the two of them laughing, holding hands in the meadow.
+  const meadow = !clip && cover === 'meadow'
+    ? h('img', { class: 'unveil__couple', src: asset('img/cover-meadow.webp'), alt: `${config.couple.bride} and ${config.couple.groom}`, decoding: 'async' })
+    : null;
+  const people = clip ? [clip] : meadow ? [meadow] : [bride, groom];
+  const pair = h('div', { class: `unveil__pair${clip ? ' unveil__pair--clip' : ''}` }, ...people);
   const bleedWrap = h('div', { class: 'unveil__bleed-wrap' }, bleed);
   const root = h('div', { class: 'unveil', role: 'dialog', 'aria-label': 'Wedding invitation' }, bleedWrap, pair, content);
   const spread = inkMask(bleedWrap, 'blot');
@@ -62,6 +68,8 @@ export function unveil(ctx, { onOpen }) {
   if (clip) {
     gsap.from(clip, { autoAlpha: 0, duration: 1.2, ease: 'power2.out', delay: 0.4 });
     clip.play?.().catch(() => {});
+  } else if (meadow) {
+    if (!ctx.reduced) gsap.from(meadow, { autoAlpha: 0, y: 18, duration: 1.4, ease: 'power2.out', delay: 0.6 });
   } else if (!ctx.reduced) {
     if (new URLSearchParams(location.search).get('entrance') === 'walk') {
       gsap.timeline({ delay: 0.5 })

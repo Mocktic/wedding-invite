@@ -201,6 +201,20 @@ button, input, textarea { font: inherit; color: inherit; }
   filter: saturate(0.9) sepia(0.06); /* sit with the paper rather than pop off it */
 }
 .unveil__person--bride { height: 96%; }
+.unveil__couple {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 94%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: saturate(0.92) sepia(0.08);
+  /* the two of them stay crisp; only the meadow's cut-off sides melt into the paper */
+  -webkit-mask-image: linear-gradient(to bottom, #000 56%, transparent 68%), linear-gradient(to right, transparent 1%, #000 9%, #000 91%, transparent 99%);
+  -webkit-mask-composite: source-over;
+  mask-image: linear-gradient(to bottom, #000 56%, transparent 68%), linear-gradient(to right, transparent 1%, #000 9%, #000 91%, transparent 99%);
+  mask-composite: add;
+}
 
 .unveil__mantra {
   margin: 0 0 1.3rem;
