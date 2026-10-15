@@ -95,7 +95,7 @@ export function rsvp(app, ctx) {
     fireworks,
     knotSvg,
     h('header', { class: 'rsvp__header' },
-      h('h2', { class: 'script rsvp__title' }, 'Will you bless us?'),
+      h('h2', { class: 'script rsvp__title' }, 'Will you join us?'),
       h('p', { class: 'rsvp__lede' }, `Let ${bride} & ${groom} know you're coming, and leave them a note if you like.`)),
     card,
     sparks,
