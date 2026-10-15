@@ -40,6 +40,11 @@ invites: {
   family:    { events: ['ganesh', 'haldi', 'engagement', 'baraat', 'lagan', 'reception'] },
   wedding:   { events: ['engagement', 'baraat', 'lagan', 'reception'] },
   reception: { events: ['reception'], headline: 'reception' },
+
+  // Friends only: the After Party (Fri 4 Dec, Pushkar) has `show: false`, so it appears only on these three
+  'after-party':           { events: ['afterparty'], headline: 'afterparty' },
+  'wedding-after-party':   { events: ['ganesh', 'haldi', 'engagement', 'baraat', 'lagan', 'reception', 'afterparty'] },
+  'reception-after-party': { events: ['reception', 'afterparty'], headline: 'reception' },
 }
 ```
 
@@ -49,6 +54,12 @@ invites: {
 | `/?invite=family` | all six: Ganesh Sthapana, Haldi & Mehendi, Engagement, Baraat/Toran/Varmala, Wedding Ceremony, Reception | Wedding Ceremony · Wed 2 Dec · Badi Sadri |
 | `/?invite=wedding` | 1–3 December: Engagement, Baraat/Toran/Varmala, Wedding Ceremony, Reception | Wedding Ceremony · Wed 2 Dec · Badi Sadri |
 | `/?invite=reception` | Wedding Reception only | Wedding Reception · Thu 3 Dec · RTDC Ajmer |
+| `/?invite=after-party` | After Party only | After Party · Fri 4 Dec, 6:00 PM – Midnight · Pushkar |
+| `/?invite=wedding-after-party` | all six events + After Party | Wedding Ceremony · Wed 2 Dec · Badi Sadri |
+| `/?invite=reception-after-party` | Wedding Reception + After Party | Wedding Reception · Thu 3 Dec · RTDC Ajmer |
+
+The After Party is for friends only. Its `show` is `false`, so it never appears on the plain link or on
+`family`, `wedding` or `reception`; only the three `…after-party` links show it.
 
 What changes with the preset:
 - the headline date, the countdown and the place scene ("will be held in … the land of Mewar / the city of Ajmer")
@@ -72,7 +83,7 @@ All the options the invite understands. Combine them with `&` in any order, e.g.
 
 | Option | Values | Default | What it does |
 |---|---|---|---|
-| `invite` | `family` · `wedding` · `reception` (any preset in config) | plain link | Which events this guest sees (see above) |
+| `invite` | `family` · `wedding` · `reception` · `after-party` · `wedding-after-party` · `reception-after-party` (any preset in config) | plain link | Which events this guest sees (see above) |
 | `autoplay` | `1` (any value except `0`) | off | **The film plays itself** after the tap at a calm pace. It rests on the painted names (about 2.5 s), on the night Save the Date (about 3.5 s), and on each event card (about 3.5 s) when the cards are switched on, then stops at the RSVP. A ❚❚/▶ button (bottom-left) pauses and resumes; any scroll, swipe or arrow key pauses it too. Ignored for guests whose phone asks for reduced motion |
 | `cover` | `video` | photos | **Preview:** the walking video (sky removed, meadow kept) on the opening screen instead of the two photos. It plays once and rests on its last frame |
 | `entrance` | `walk` | fade in | **Preview:** the two cover photos glide in from either side instead of fading in (ignored with `cover=video`) |
@@ -94,6 +105,12 @@ Replace `your-site.vercel.app` with the real address.
 | Wedding guests, plays itself | `https://your-site.vercel.app/?invite=wedding&autoplay=1` |
 | Reception only | `https://your-site.vercel.app/?invite=reception` |
 | Reception only, plays itself | `https://your-site.vercel.app/?invite=reception&autoplay=1` |
+| Friends: After Party only | `https://your-site.vercel.app/?invite=after-party` |
+| Friends: After Party only, plays itself | `https://your-site.vercel.app/?invite=after-party&autoplay=1` |
+| Friends: whole wedding + After Party | `https://your-site.vercel.app/?invite=wedding-after-party` |
+| Friends: whole wedding + After Party, plays itself | `https://your-site.vercel.app/?invite=wedding-after-party&autoplay=1` |
+| Friends: Reception + After Party | `https://your-site.vercel.app/?invite=reception-after-party` |
+| Friends: Reception + After Party, plays itself | `https://your-site.vercel.app/?invite=reception-after-party&autoplay=1` |
 
 Previews for the couple to compare (not for guests yet):
 
