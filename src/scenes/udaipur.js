@@ -99,7 +99,9 @@ export function udaipur(app, ctx) {
   const countdownEl = h('div', { class: 'countdown', 'aria-live': 'polite' });
   const calButton = h('button', { class: 'chip', type: 'button', html: `${icons.calendar}<span>Add to Calendar</span>` });
   const saveLabel = h('p', { class: 'script udaipur__save' }, 'Save the Date');
-  const weekday = h('p', { class: 'eyebrow udaipur__weekday' }, `${day.weekday} · ${main.time}`);
+  const weekday = h('div', { class: 'udaipur__when' },
+    h('p', { class: 'eyebrow udaipur__weekday' }, day.weekday),
+    h('p', { class: 'udaipur__time' }, main.time));
   const extras = h('div', { class: 'udaipur__extras' }, countdownEl, calButton);
   const dateCopy = h('div', { class: 'udaipur__copy udaipur__date' },
     saveLabel,

@@ -26,7 +26,20 @@ export function unveil(ctx, { onOpen }) {
   );
   const bride = h('img', { class: 'unveil__person unveil__person--bride', src: asset('img/cover-bride.webp'), alt: config.couple.bride, decoding: 'async' });
   const groom = h('img', { class: 'unveil__person unveil__person--groom', src: asset('img/cover-groom.webp'), alt: config.couple.groom, decoding: 'async' });
-  const pair = h('div', { class: 'unveil__pair' }, bride, groom);
+  // PREVIEW: ?cover=video swaps the two photos for the walking clip (sky keyed out, meadow kept).
+  // It plays once and rests on its last frame (them facing each other, holding hands).
+  const useVideo = new URLSearchParams(location.search).get('cover') === 'video';
+  const clip = useVideo
+    ? h('video', {
+      class: 'unveil__clip', muted: true, playsinline: true, autoplay: true, preload: 'auto',
+      poster: asset('img/cover-couple-poster.webp'), 'aria-label': `${config.couple.bride} and ${config.couple.groom}`,
+    },
+    // iPhone/Safari need HEVC with alpha; everyone else gets VP9 WebM with alpha
+    h('source', { src: asset('video/cover-couple.mov'), type: 'video/quicktime; codecs="hvc1"' }),
+    h('source', { src: asset('video/cover-couple.webm'), type: 'video/webm; codecs="vp9"' }))
+    : null;
+  if (clip) clip.muted = true;
+  const pair = h('div', { class: `unveil__pair${clip ? ' unveil__pair--clip' : ''}` }, ...(clip ? [clip] : [bride, groom]));
   const bleedWrap = h('div', { class: 'unveil__bleed-wrap' }, bleed);
   const root = h('div', { class: 'unveil', role: 'dialog', 'aria-label': 'Wedding invitation' }, bleedWrap, pair, content);
   const spread = inkMask(bleedWrap, 'blot');
@@ -46,7 +59,10 @@ export function unveil(ctx, { onOpen }) {
   gsap.from(content.children, { autoAlpha: 0, y: 14, duration: 1.1, stagger: 0.12, ease: 'power2.out', delay: 0.2 });
   // The couple simply appear (gently). Add ?entrance=walk to the link to preview a version
   // where they walk in from either side instead.
-  if (!ctx.reduced) {
+  if (clip) {
+    gsap.from(clip, { autoAlpha: 0, duration: 1.2, ease: 'power2.out', delay: 0.4 });
+    clip.play?.().catch(() => {});
+  } else if (!ctx.reduced) {
     if (new URLSearchParams(location.search).get('entrance') === 'walk') {
       gsap.timeline({ delay: 0.5 })
         .from(bride, { xPercent: -140, autoAlpha: 0, duration: 1.8, ease: 'power3.out' }, 0)
