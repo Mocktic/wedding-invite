@@ -30,8 +30,10 @@ Lines marked `PLACEHOLDER` are waiting on real details.
 
 ### Different invites for different guests
 
-Each event has `show: true | false`, which controls what the plain link shows.
-For other guest lists, add a preset under `invites` and share its link:
+Each event has `show: true | false` in `src/config.js`, which controls what the **plain link** (no
+`?invite=`) shows. Right now all six events have `show: true`.
+
+For other guest lists, add a preset under `invites` and share its link. The presets in the config today:
 
 ```js
 invites: {
@@ -41,17 +43,72 @@ invites: {
 }
 ```
 
-| Link | Shows |
-|---|---|
-| `https://your-site.vercel.app/` | events with `show: true` |
-| `https://your-site.vercel.app/?invite=family` | all six events |
-| `https://your-site.vercel.app/?invite=wedding` | 1–3 December |
-| `https://your-site.vercel.app/?invite=reception` | only the reception; its date and venue become the headline |
+| Link | Events on this invite | Headline (Save the Date, countdown, place scene) |
+|---|---|---|
+| `/` (plain link) | every event with `show: true` (currently all six) | Wedding Ceremony · Wed 2 Dec · Badi Sadri |
+| `/?invite=family` | all six: Ganesh Sthapana, Haldi & Mehendi, Engagement, Baraat/Toran/Varmala, Wedding Ceremony, Reception | Wedding Ceremony · Wed 2 Dec · Badi Sadri |
+| `/?invite=wedding` | 1–3 December: Engagement, Baraat/Toran/Varmala, Wedding Ceremony, Reception | Wedding Ceremony · Wed 2 Dec · Badi Sadri |
+| `/?invite=reception` | Wedding Reception only | Wedding Reception · Thu 3 Dec · RTDC Ajmer |
 
-The page adapts to whatever is shown: the headline date, the countdown, the venue scene,
-"Add to Calendar" (every shown event goes into the calendar file on iPhone/Mac), the venues note
-and the "See you in …" line. Each RSVP records which invite link it came from.
-Anyone who edits the link by hand could see another preset, so treat presets as a convenience, not a secret.
+What changes with the preset:
+- the headline date, the countdown and the place scene ("will be held in … the land of Mewar / the city of Ajmer")
+- the opening screen's date
+- the events listed in the RSVP form's "Events you'll attend"
+- "Add to Calendar" (every event on the invite goes into the calendar file on iPhone/Mac)
+- the "See you in …" line on the RSVP thank-you card
+- the event cards and the "Good to know" venues note, when the cards are switched on
+
+Each RSVP records which preset it came from (the "Invite link" column in the sheet).
+
+Good to know:
+- Preset names are case-sensitive (`?invite=reception`, not `Reception`). An unknown name falls back to the plain link.
+- A preset may include events whose `show` is `false`.
+- If a preset's headline isn't on it, the first event on that invite becomes the headline.
+- Anyone who edits the link by hand could see another preset, so treat presets as a convenience, not a secret.
+
+## Link options
+
+All the options the invite understands. Combine them with `&` in any order, e.g. `?invite=reception&autoplay=1`.
+
+| Option | Values | Default | What it does |
+|---|---|---|---|
+| `invite` | `family` · `wedding` · `reception` (any preset in config) | plain link | Which events this guest sees (see above) |
+| `autoplay` | `1` (any value except `0`) | off | **The film plays itself** after the tap at a calm pace. It rests on the painted names (about 2.5 s), on the night Save the Date (about 3.5 s), and on each event card (about 3.5 s) when the cards are switched on, then stops at the RSVP. A ❚❚/▶ button (bottom-left) pauses and resumes; any scroll, swipe or arrow key pauses it too. Ignored for guests whose phone asks for reduced motion |
+| `cover` | `video` | photos | **Preview:** the walking video (sky removed, meadow kept) on the opening screen instead of the two photos. It plays once and rests on its last frame |
+| `entrance` | `walk` | fade in | **Preview:** the two cover photos glide in from either side instead of fading in (ignored with `cover=video`) |
+| `cards` | `1` | config | **Preview:** shows the event-card deck even though `sections.celebrations` is `false` in config |
+
+Without `autoplay`, a "Swipe up to begin" cue ("Scroll to begin" on laptops) appears after the tap and
+disappears on the first scroll. Then "Swipe up to continue" fades in whenever the guest stops mid-way for
+4 seconds. It never shows while the film is playing itself, while typing, or once the RSVP form is in view.
+
+### Ready-to-share links
+
+Replace `your-site.vercel.app` with the real address.
+
+| For | Link |
+|---|---|
+| Close family (all six events) | `https://your-site.vercel.app/?invite=family` |
+| Close family, plays itself | `https://your-site.vercel.app/?invite=family&autoplay=1` |
+| Wedding guests (1–3 Dec) | `https://your-site.vercel.app/?invite=wedding` |
+| Wedding guests, plays itself | `https://your-site.vercel.app/?invite=wedding&autoplay=1` |
+| Reception only | `https://your-site.vercel.app/?invite=reception` |
+| Reception only, plays itself | `https://your-site.vercel.app/?invite=reception&autoplay=1` |
+
+Previews for the couple to compare (not for guests yet):
+
+| Preview | Link |
+|---|---|
+| Video cover | `https://your-site.vercel.app/?cover=video` |
+| Photos gliding in | `https://your-site.vercel.app/?entrance=walk` |
+| Event cards switched back on | `https://your-site.vercel.app/?cards=1` |
+| Everything together | `https://your-site.vercel.app/?invite=family&cover=video&cards=1&autoplay=1` |
+
+## Switching sections off
+
+`config.sections.celebrations` is `false`: the event-card deck (and the "Good to know" notes on its last
+card) is hidden and the RSVP follows the date scene directly. The code is untouched; set it to `true` to
+bring the deck back. The RSVP form still lists every event to tick.
 
 ## RSVP data
 

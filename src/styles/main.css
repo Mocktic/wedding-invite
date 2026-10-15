@@ -884,6 +884,30 @@ button, input, textarea { font: inherit; color: inherit; }
 }
 .sound svg { width: 22px; height: 22px; fill: currentColor; }
 
+/* ?autoplay=1: play / pause the film, bottom-left (the music button is bottom-right) */
+.autoplay-btn {
+  position: fixed;
+  z-index: 58;
+  left: max(calc((100vw - var(--col)) / 2 + 14px), 14px);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(184, 137, 59, 0.6);
+  border-radius: 50%;
+  background: rgba(248, 241, 228, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--kumkum);
+  cursor: pointer;
+  transition: opacity 0.5s, transform 0.2s var(--ease-out);
+}
+.autoplay-btn svg { width: 20px; height: 20px; fill: currentColor; }
+.autoplay-btn:active { transform: scale(0.94); }
+.autoplay-btn.is-done { opacity: 0; }
+
 /* ── scroll guide (first screen only) ── */
 .scroll-hint {
   position: fixed;

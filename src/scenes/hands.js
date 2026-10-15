@@ -88,5 +88,8 @@ export function hands(app, ctx, { next }) {
   const end = next.animate(tl, 7.6);
   tl.to({}, { duration: 0.8 }, end);
 
+  // autoplay: rest here once the names are fully painted
+  ctx.autoplay?.addBeat({ at: () => tl.scrollTrigger.end, hold: 2.5 });
+
   return { load: seq.load };
 }

@@ -119,6 +119,13 @@ export default {
     reception: { events: ['reception'], headline: 'reception' },
   },
 
+  // Sections that can be switched off without deleting their code.
+  //   celebrations: the event-card deck (and the "Good to know" notes on its last card).
+  //   Off for now; set to true to bring it back, or add ?cards=1 to the link to preview it.
+  sections: {
+    celebrations: false,
+  },
+
   // "Good to know" row after the schedule. icon: dress | wind | map
   // A note with `venues: true` lists the venues on this guest's invite.
   notes: [

@@ -107,6 +107,13 @@ export function rsvp(app, ctx) {
   );
   app.append(section);
 
+  // autoplay: the film ends here, with the heading near the top and the form below it
+  ctx.autoplay?.addBeat({
+    at: () => section.querySelector('.rsvp__header').getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.12,
+    hold: 0,
+    final: true,
+  });
+
   if (ctx.reduced) {
     gsap.set(knot.reveal, { drawSVG: '100%' });
   } else {

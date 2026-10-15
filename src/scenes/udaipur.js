@@ -203,6 +203,9 @@ export function udaipur(app, ctx) {
     .fromTo(extras, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 8.8)
     .to({}, { duration: 0.8 });
 
+  // autoplay: rest on the night Save the Date, with the countdown showing
+  ctx.autoplay?.addBeat({ at: () => tl.scrollTrigger.end, hold: 3.5 });
+
   // After the pin exists, so these triggers measure the pinned scroll distance.
   if (!ctx.lowPower) {
     playWhileVisible(birds, section);
