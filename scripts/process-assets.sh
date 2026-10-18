@@ -39,6 +39,9 @@ ff -i $SRC/provided/bride-namaste.png -vf "crop=481:1509:304:16,scale=-2:1000:fl
 ff -i $SRC/provided/groom-namaste.png -vf "crop=476:1571:273:28,scale=-2:1041:flags=lanczos" $TMP/groom.png
 cwebp -quiet -q 82 -alpha_q 90 $TMP/bride.png -o $OUT/img/cover-bride.webp
 cwebp -quiet -q 82 -alpha_q 90 $TMP/groom.png -o $OUT/img/cover-groom.webp
+# PREVIEW (?cover=meadow): the two of them laughing, holding hands in the meadow (already cut out)
+ff -i $SRC/provided/couple-meadow.png -vf "scale=-2:1100:flags=lanczos" $TMP/meadow.png
+cwebp -quiet -q 82 -alpha_q 90 $TMP/meadow.png -o $OUT/img/cover-meadow.webp
 
 # Venue: colour painting + a sepia pencil-sketch version of the same painting
 ff -i $SRC/provided/lake-palace.png -vf "scale=1080:-2" $TMP/lake.png

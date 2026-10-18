@@ -4,6 +4,7 @@ import { buildICS, googleCalendarUrl } from './calendar.js';
 import { validateRsvp, submitRsvp } from './rsvp.js';
 import { vi } from 'vitest';
 import config from '../config.js';
+import { resolveInvite } from './invite.js';
 
 describe('timeLeft', () => {
   const target = '2026-12-01T16:00:00+05:30';
@@ -116,6 +117,15 @@ describe('config', () => {
 
   it('gives every venue a tagline for the place scene', () => {
     for (const [key, v] of Object.entries(config.venues)) expect(v.tagline, key).toBeTruthy();
+  });
+
+  it('keeps the friends-only after party off the plain link and the family invites', () => {
+    for (const q of ['', '?invite=family', '?invite=wedding', '?invite=reception']) {
+      expect(resolveInvite(config, q).events.map((e) => e.id), q || 'plain link').not.toContain('afterparty');
+    }
+    for (const q of ['?invite=after-party', '?invite=wedding-after-party', '?invite=reception-after-party']) {
+      expect(resolveInvite(config, q).events.map((e) => e.id), q).toContain('afterparty');
+    }
   });
 
   it('headlines the Lagan Phere on 2 December', () => {

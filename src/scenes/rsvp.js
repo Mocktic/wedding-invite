@@ -95,7 +95,7 @@ export function rsvp(app, ctx) {
     fireworks,
     knotSvg,
     h('header', { class: 'rsvp__header' },
-      h('h2', { class: 'script rsvp__title' }, 'Will you bless us?'),
+      h('h2', { class: 'script rsvp__title' }, 'Will you join us?'),
       h('p', { class: 'rsvp__lede' }, `Let ${bride} & ${groom} know you're coming, and leave them a note if you like.`)),
     card,
     sparks,
@@ -106,6 +106,13 @@ export function rsvp(app, ctx) {
       h('p', { class: 'footer__mantra', lang: 'hi' }, '॥ शुभमस्तु ॥')),
   );
   app.append(section);
+
+  // autoplay: the film ends here, with the heading near the top and the form below it
+  ctx.autoplay?.addBeat({
+    at: () => section.querySelector('.rsvp__header').getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.12,
+    hold: 0,
+    final: true,
+  });
 
   if (ctx.reduced) {
     gsap.set(knot.reveal, { drawSVG: '100%' });

@@ -74,6 +74,33 @@ describe('resolveInvite', () => {
   });
 });
 
+describe('events that run past midnight', () => {
+  const late = {
+    venues: { club: { name: 'The Club', city: 'Ajmer', address: '', mapUrl: null } },
+    events: [{ id: 'party', show: true, title: 'After Party', date: '2026-12-04', start: '18:00', end: '00:00', venue: 'club' }],
+    headline: 'party',
+  };
+
+  it('ends at midnight on the next day', () => {
+    const party = resolveInvite(late, '').events[0];
+    expect(party.time).toBe('6:00 PM – Midnight');
+    expect(party.startISO).toBe('2026-12-04T18:00:00+05:30');
+    expect(party.endISO).toBe('2026-12-05T00:00:00+05:30');
+  });
+
+  it('also accepts 24:00 for midnight', () => {
+    const party = resolveInvite({ ...late, events: [{ ...late.events[0], end: '24:00' }] }, '').events[0];
+    expect(party.time).toBe('6:00 PM – Midnight');
+    expect(party.endISO).toBe('2026-12-05T00:00:00+05:30');
+  });
+
+  it('handles an end in the small hours', () => {
+    const party = resolveInvite({ ...late, events: [{ ...late.events[0], end: '01:30' }] }, '').events[0];
+    expect(party.time).toBe('6:00 PM – 1:30 AM');
+    expect(party.endISO).toBe('2026-12-05T01:30:00+05:30');
+  });
+});
+
 describe('formatting', () => {
   it('formats times and ranges like a printed card', () => {
     expect(formatTimeRange('06:00')).toBe('6:00 AM');

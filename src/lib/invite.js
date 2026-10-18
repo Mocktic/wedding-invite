@@ -18,10 +18,13 @@ const clock = (hhmm) => {
   return { text: `${h % 12 || 12}:${String(m).padStart(2, '0')}`, meridiem: h < 12 ? 'AM' : 'PM' };
 };
 
-// "6:00 AM", "1:00 – 4:00 PM", "9:00 AM – 12:00 PM"
+const isMidnight = (hhmm) => hhmm === '00:00' || hhmm === '24:00';
+
+// "6:00 AM", "1:00 – 4:00 PM", "9:00 AM – 12:00 PM", "6:00 PM – Midnight"
 export function formatTimeRange(start, end) {
   const a = clock(start);
   if (!end) return `${a.text} ${a.meridiem}`;
+  if (isMidnight(end)) return `${a.text} ${a.meridiem} – Midnight`;
   const b = clock(end);
   return a.meridiem === b.meridiem
     ? `${a.text} – ${b.text} ${b.meridiem}`
@@ -33,13 +36,31 @@ const plusOneHour = (hhmm) => {
   return `${String(Math.min(h + 1, 23)).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 };
 
+const minutes = (hhmm) => {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+};
+
+const nextDay = (date) => {
+  const [y, m, d] = date.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+};
+
+// An end at or before the start (e.g. 00:00, 24:00 or 01:30 after an evening start) is the next day.
+function endISO(event) {
+  if (!event.end) return `${event.date}T${plusOneHour(event.start)}:00${IST}`;
+  const end = event.end === '24:00' ? '00:00' : event.end;
+  const date = minutes(end) <= minutes(event.start) ? nextDay(event.date) : event.date;
+  return `${date}T${end}:00${IST}`;
+}
+
 function resolveEvent(event, venues) {
   const d = formatDay(event.date);
   return {
     ...event,
     venue: venues[event.venue] || { name: event.venue, city: event.venue, address: '', mapUrl: null },
     startISO: `${event.date}T${event.start}:00${IST}`,
-    endISO: `${event.date}T${event.end || plusOneHour(event.start)}:00${IST}`,
+    endISO: endISO(event),
     time: formatTimeRange(event.start, event.end),
     dayLabel: `${d.weekday}, ${d.day} ${d.month}`,
     dayParts: d,

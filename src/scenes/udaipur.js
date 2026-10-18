@@ -99,7 +99,9 @@ export function udaipur(app, ctx) {
   const countdownEl = h('div', { class: 'countdown', 'aria-live': 'polite' });
   const calButton = h('button', { class: 'chip', type: 'button', html: `${icons.calendar}<span>Add to Calendar</span>` });
   const saveLabel = h('p', { class: 'script udaipur__save' }, 'Save the Date');
-  const weekday = h('p', { class: 'eyebrow udaipur__weekday' }, `${day.weekday} · ${main.time}`);
+  const weekday = h('div', { class: 'udaipur__when' },
+    h('p', { class: 'eyebrow udaipur__weekday' }, day.weekday),
+    h('p', { class: 'udaipur__time' }, main.time));
   const extras = h('div', { class: 'udaipur__extras' }, countdownEl, calButton);
   const dateCopy = h('div', { class: 'udaipur__copy udaipur__date' },
     saveLabel,
@@ -200,6 +202,9 @@ export function udaipur(app, ctx) {
     .fromTo(glow, { autoAlpha: 0 }, { autoAlpha: 0.7, duration: 1.4 }, 8.0)
     .fromTo(extras, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 8.8)
     .to({}, { duration: 0.8 });
+
+  // autoplay: rest on the night Save the Date, with the countdown showing
+  ctx.autoplay?.addBeat({ at: () => tl.scrollTrigger.end, hold: 3.5 });
 
   // After the pin exists, so these triggers measure the pinned scroll distance.
   if (!ctx.lowPower) {

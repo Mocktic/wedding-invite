@@ -24,6 +24,13 @@ export default {
       address: 'Chittorgarh, Rajasthan',
       mapUrl: 'https://maps.google.com/?q=Badi+Sadri,+Rajasthan', // swap for the exact venue's link
     },
+    pushkar: {
+      name: 'Pushkar',
+      city: 'Pushkar',
+      tagline: 'the lake town of Pushkar',
+      address: 'Pushkar, Rajasthan', // PLACEHOLDER: swap for the exact venue once booked
+      mapUrl: 'https://maps.google.com/?q=Pushkar,+Rajasthan', // swap for the exact venue's link
+    },
     rtdcAjmer: {
       name: 'RTDC Ajmer',
       city: 'Ajmer',
@@ -105,6 +112,19 @@ export default {
       note: 'An evening of dinner, music and celebration.',
       image: 'roundel-dinner.webp',
     },
+    {
+      // Friends only: never on the plain link or the family/wedding/reception presets —
+      // only on the *after-party presets below.
+      id: 'afterparty',
+      show: false,
+      title: 'After Party',
+      date: '2026-12-04',
+      start: '18:00',
+      end: '00:00', // midnight (shown as "6:00 PM – Midnight"; ends on 5 Dec in calendars)
+      venue: 'pushkar',
+      note: 'Music, dancing and a late night with our favourite people.',
+      image: 'roundel-dinner.webp', // PLACEHOLDER painting (only shown on the event cards)
+    },
   ],
 
   // The event used for the big "Save the Date", the countdown and the place scene.
@@ -117,6 +137,18 @@ export default {
     family: { events: ['ganesh', 'haldi', 'engagement', 'baraat', 'lagan', 'reception'] },
     wedding: { events: ['engagement', 'baraat', 'lagan', 'reception'] },
     reception: { events: ['reception'], headline: 'reception' },
+
+    // Friends: the after party, alone or with the wedding functions
+    'after-party': { events: ['afterparty'], headline: 'afterparty' },
+    'wedding-after-party': { events: ['ganesh', 'haldi', 'engagement', 'baraat', 'lagan', 'reception', 'afterparty'] },
+    'reception-after-party': { events: ['reception', 'afterparty'], headline: 'reception' },
+  },
+
+  // Sections that can be switched off without deleting their code.
+  //   celebrations: the event-card deck (and the "Good to know" notes on its last card).
+  //   Off for now; set to true to bring it back, or add ?cards=1 to the link to preview it.
+  sections: {
+    celebrations: false,
   },
 
   // "Good to know" row after the schedule. icon: dress | wind | map

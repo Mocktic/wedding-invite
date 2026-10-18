@@ -209,14 +209,22 @@ export function celebrations(app, ctx) {
     snap: { snapTo: 'labelsDirectional', inertia: false, duration: { min: 0.25, max: 0.7 }, delay: 0.08, ease: 'power1.inOut' },
     onToggle: (self) => (self.isActive ? stepper?.engage() : stepper?.release()),
   });
-  stepper = deckStepper(st, tl, ctx.lenis);
+  stepper = deckStepper(st, tl, ctx.lenis, () => ctx.autoplay?.isPlaying());
   if (st.isActive) stepper.engage();
+
+  // autoplay: rest on every card (and on "Good to know"); if the guest pauses inside the deck,
+  // the one-card-per-gesture stepping takes over from there.
+  Object.keys(tl.labels).forEach((label) => ctx.autoplay?.addBeat({ at: () => st.labelToScroll(label), hold: 3.5 }));
+  ctx.autoplay?.onChange((playing) => {
+    if (playing) stepper.release();
+    else if (st.isActive) stepper.engage();
+  });
 }
 
 // While the deck is pinned, every wheel or swipe gesture moves exactly one card. Without this a
 // fast trackpad flick (whose momentum keeps firing for a second) glides through the whole deck
 // and lands on the last card. At either end the next gesture hands scrolling back to the page.
-function deckStepper(st, tl, lenis) {
+function deckStepper(st, tl, lenis, autoplaying = () => false) {
   const labels = Object.keys(tl.labels).sort((a, b) => tl.labels[a] - tl.labels[b]);
   const posOf = (label) => st.labelToScroll(label);
   const DURATION = 0.6;
@@ -287,7 +295,7 @@ function deckStepper(st, tl, lenis) {
 
   return {
     engage() {
-      if (engaged) return;
+      if (engaged || autoplaying()) return; // the film is driving; don't fight it
       engaged = true;
       lenis?.stop(); // kill any glide that carried us in
       lastAt = performance.now(); // treat the tail of that glide as fading momentum, not a new flick

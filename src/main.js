@@ -21,7 +21,8 @@ import { preloadInk } from './lib/inkMask.js';
 import { createPetals } from './lib/petals.js';
 import { createMusic } from './lib/music.js';
 import { icons } from './lib/icons.js';
-import { scrollHint } from './lib/scrollHint.js';
+import { scrollGuide } from './lib/scrollHint.js';
+import { createAutoplay } from './lib/autoplay.js';
 import { unveil } from './scenes/unveil.js';
 import { hands } from './scenes/hands.js';
 import { namesLayer } from './scenes/names.js';
@@ -62,6 +63,13 @@ async function start() {
     lenis.stop();
   }
   ctx.lenis = lenis;
+  if (import.meta.env.DEV) window.__ctx = ctx; // handy for testing in the browser console
+
+  // ?autoplay=1 → the film plays itself after the unveil (scenes register where it pauses)
+  const params = new URLSearchParams(location.search);
+  ctx.autoplay = params.has('autoplay') && params.get('autoplay') !== '0' && !reducedMotion
+    ? createAutoplay(ctx)
+    : null;
 
   // Sound toggle
   const soundBtn = h('button', { class: 'sound', type: 'button', 'aria-label': 'Music', 'aria-pressed': 'false', hidden: true });
@@ -84,7 +92,8 @@ async function start() {
     ]).catch(() => {});
     const prologue = hands(app, ctx, { next: namesLayer(ctx) });
     udaipur(app, ctx);
-    celebrations(app, ctx);
+    // The event cards are switched off in config (sections.celebrations); ?cards=1 previews them.
+    if (config.sections?.celebrations !== false || params.get('cards') === '1') celebrations(app, ctx);
     rsvp(app, ctx);
     prologue.load();
     preloadInk();
@@ -100,7 +109,9 @@ async function start() {
       soundBtn.hidden = false;
       gsap.fromTo(soundBtn, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.6, ease: 'back.out(2)' });
       ScrollTrigger.refresh();
-      scrollHint(ctx).show(reducedMotion ? 0 : 1.1); // after the red ink has cleared
+      scrollGuide(ctx, { autoplay: ctx.autoplay });
+      // the film starts by itself once the red ink has cleared
+      if (ctx.autoplay) setTimeout(() => ctx.autoplay.start(), 1600);
     },
   });
 }
