@@ -17,7 +17,7 @@ const KNOT = [
 
 export function rsvp(app, ctx) {
   const { config } = ctx;
-  const { bride, groom } = config.couple;
+  const { both } = ctx.couple;
 
   const knotSvg = s('svg', { class: 'rsvp__knot', viewBox: '0 0 390 240', 'aria-hidden': 'true' });
   const knot = thread(knotSvg, KNOT, { width: 3 });
@@ -96,7 +96,7 @@ export function rsvp(app, ctx) {
     knotSvg,
     h('header', { class: 'rsvp__header' },
       h('h2', { class: 'script rsvp__title' }, 'Will you join us?'),
-      h('p', { class: 'rsvp__lede' }, `Let ${bride} & ${groom} know you're coming, and leave them a note if you like.`)),
+      h('p', { class: 'rsvp__lede' }, `Let ${both} know you're coming, and leave them a note if you like.`)),
     card,
     sparks,
     h('footer', { class: 'footer' },
@@ -171,7 +171,7 @@ export function rsvp(app, ctx) {
   function celebrate(firstName, eventCount) {
     const thanks = brushText(thanksSvg, { text: `Thank you, ${firstName}`, x: 160, y: 78, size: 44, className: 'card__thanks' });
     const noted = eventCount ? ` We’ve noted ${eventCount === 1 ? 'the event' : `the ${eventCount} events`} you’ll attend.` : '';
-    thanksLine.textContent = `Your blessings are on their way to ${bride} & ${groom}.${noted}`;
+    thanksLine.textContent = `Your blessings are on their way to ${both}.${noted}`;
     const r = card.getBoundingClientRect();
     const tl = gsap.timeline();
     tl.to(card, { rotateY: 180, duration: 1.1, ease: 'power3.inOut' }, 0)

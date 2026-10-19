@@ -39,7 +39,7 @@ function createCue({ reduced }) {
   };
 }
 
-// opts.autoplay: the autoplay controller when ?autoplay=1, else null
+// opts.autoplay: the autoplay controller (null with ?autoplay=0 or reduced motion)
 export function scrollGuide(ctx, { autoplay = null } = {}) {
   const cue = createCue(ctx);
   const verb = cue.touch ? 'Swipe up' : 'Scroll';

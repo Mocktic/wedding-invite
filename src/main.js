@@ -22,7 +22,8 @@ import { createPetals } from './lib/petals.js';
 import { createMusic } from './lib/music.js';
 import { icons } from './lib/icons.js';
 import { scrollGuide } from './lib/scrollHint.js';
-import { createAutoplay } from './lib/autoplay.js';
+import { createAutoplay, autoplayWanted } from './lib/autoplay.js';
+import { coupleNames } from './lib/couple.js';
 import { unveil } from './scenes/unveil.js';
 import { hands } from './scenes/hands.js';
 import { namesLayer } from './scenes/names.js';
@@ -45,9 +46,12 @@ async function start() {
   document.body.append(petalCanvas);
 
   const invite = resolveInvite(config, location.search);
+  const couple = coupleNames(config.couple, location.search);
+  if (couple.groomFirst) document.title = document.title.replace(`${config.couple.bride} & ${config.couple.groom}`, couple.both);
   const ctx = {
     config,
     invite,
+    couple,
     attending: createAttending(invite.events.map((e) => e.id)),
     reduced: reducedMotion,
     lowPower,
@@ -65,9 +69,9 @@ async function start() {
   ctx.lenis = lenis;
   if (import.meta.env.DEV) window.__ctx = ctx; // handy for testing in the browser console
 
-  // ?autoplay=1 → the film plays itself after the unveil (scenes register where it pauses)
+  // The film plays itself after the unveil unless the link has ?autoplay=0 (scenes register where it pauses)
   const params = new URLSearchParams(location.search);
-  ctx.autoplay = params.has('autoplay') && params.get('autoplay') !== '0' && !reducedMotion
+  ctx.autoplay = autoplayWanted(location.search) && !reducedMotion
     ? createAutoplay(ctx)
     : null;
 

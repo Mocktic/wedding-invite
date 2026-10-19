@@ -1,8 +1,8 @@
 // Scene 2 — the names. Not a separate section: this layer is the paper that floods over the
 // alta hands, so the names begin painting while the flood is still settling.
-// The thread is routed from the measured text: down the left margin, under "Aditi", once around
-// the "&" (crossing itself like a tied thread), down the margin past "Yashwant", under it,
-// and onto a single alta bead.
+// The thread is routed from the measured text: down the left margin, under the first name, once
+// around the "&" (crossing itself like a tied thread), down the margin past the second name, under
+// it, and onto a single alta bead. The name order comes from ctx.couple (?order=1 swaps it).
 import gsap from 'gsap';
 import { h, s } from '../lib/dom.js';
 import { brushText } from '../lib/brushText.js';
@@ -13,13 +13,14 @@ const W = 390;
 const H = 844;
 const CX = W / 2;
 const MARGIN = 20;
+const MAX_NAME_W = 320; // widest a painted name may be, leaving room for the thread
 const K = 0.5523; // cubic circle constant
 
 export function namesLayer(ctx) {
-  const { bride, groom } = ctx.config.couple;
+  const { first: firstName, second: secondName, both } = ctx.couple;
   const svg = s('svg', { class: 'names__svg', viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'xMidYMid meet', 'aria-hidden': 'true' });
   const blots = ['saffron', 'rose', 'gold'].map((tone) => h('div', { class: `names__blot names__blot--${tone}` }));
-  const el = h('div', { class: 'names' }, ...blots, svg, h('h1', { class: 'sr-only' }, `${bride} & ${groom}`));
+  const el = h('div', { class: 'names' }, ...blots, svg, h('h1', { class: 'sr-only' }, both));
 
   let parts = null;
 
@@ -41,9 +42,12 @@ export function namesLayer(ctx) {
     svg.append(flourish, intro);
 
     // Vertical rhythm, driven by the real glyph boxes.
-    const aSize = 104;
-    const ySize = 84;
-    const aBox = measure(bride, aSize, 'names__name');
+    // First line larger; either name shrinks if it would run into the thread at the margins
+    // (with ?order=1, "Yashwant" leads and settles around 87px).
+    const fit = (text, size) => Math.min(size, Math.floor(size * MAX_NAME_W / measure(text, size, 'names__name').width));
+    const aSize = fit(firstName, 104);
+    const ySize = fit(secondName, 84);
+    const aBox = measure(firstName, aSize, 'names__name');
     const aTop = 205;
     const aBase = aTop - aBox.y;
     // `bottom` hugs the baseline (the font box includes a lot of empty descent below it)
@@ -51,10 +55,10 @@ export function namesLayer(ctx) {
 
     const ampBox = measure('&', 64, 'names__amp');
     const R = Math.max(ampBox.width, ampBox.height) / 2 + 14;
-    const loopY = A.bottom + 16 + R + 30; // loop centre sits clear below Aditi's underline
+    const loopY = A.bottom + 16 + R + 30; // loop centre sits clear below the first name's underline
     const ampBase = loopY - (ampBox.y + ampBox.height / 2);
 
-    const yBox = measure(groom, ySize, 'names__name');
+    const yBox = measure(secondName, ySize, 'names__name');
     const yTop = loopY + R * 1.9 + 8; // clear of the loop's exit curve (font box has headroom)
     const yBase = yTop - yBox.y;
     const Y = { x: CX - yBox.width / 2, y: yTop, w: yBox.width, bottom: yBase + ySize * 0.2 };
@@ -65,7 +69,7 @@ export function namesLayer(ctx) {
       // from the top, swerve left round the opening line and down the margin
       `M${CX},-6 C${CX},46 150,70 92,86`,
       `C${MARGIN + 8},104 ${MARGIN},${A.y - 10} ${MARGIN},${A.y + 30}`,
-      // under "Aditi"
+      // under the first name
       `C${MARGIN},${A.bottom + 4} ${A.x - 4},${A.bottom + 16} ${A.x + 20},${A.bottom + 16}`,
       `C${A.x + A.w * 0.35},${A.bottom + 28} ${A.x + A.w * 0.75},${A.bottom + 18} ${A.x + A.w + 8},${A.bottom + 4}`,
       // down the right and sweep left beneath the "&"
@@ -74,10 +78,10 @@ export function namesLayer(ctx) {
       `C${CX - K * R},${loopY + R} ${CX - R},${loopY + K * R} ${CX - R},${loopY}`,
       `C${CX - R},${loopY - K * R} ${CX - K * R},${loopY - R} ${CX},${loopY - R}`,
       `C${CX + K * R},${loopY - R} ${CX + R},${loopY - K * R} ${CX + R},${loopY}`,
-      // … crossing its own lower sweep, then out to the left margin above "Yashwant"
+      // … crossing its own lower sweep, then out to the left margin above the second name
       `C${CX + R},${loopY + R * 1.35} ${CX + R * 0.1},${loopY + R * 1.75} ${CX - R * 0.9},${loopY + R * 1.8}`,
       `C${CX - R * 2.4},${loopY + R * 1.85} ${MARGIN},${Y.y - 18} ${MARGIN},${Y.y + 22}`,
-      // down past the "Y" and under "Yashwant"
+      // down past the second name's first letter and under it
       `C${MARGIN},${Y.bottom + 4} ${Y.x - 4},${Y.bottom + 16} ${Y.x + 20},${Y.bottom + 16}`,
       `C${Y.x + Y.w * 0.35},${Y.bottom + 28} ${Y.x + Y.w * 0.75},${Y.bottom + 18} ${Y.x + Y.w + 8},${Y.bottom + 4}`,
       // settle on the bead
@@ -85,10 +89,10 @@ export function namesLayer(ctx) {
     ].join(' ');
 
     const line = thread(svg, d, { width: 3 });
-    const first = brushText(svg, { text: bride, x: CX, y: aBase, size: aSize, className: 'names__name' });
+    const first = brushText(svg, { text: firstName, x: CX, y: aBase, size: aSize, className: 'names__name' });
     const amp = s('text', { x: CX, y: ampBase, class: 'names__amp', 'text-anchor': 'middle' }, '&');
     svg.append(amp);
-    const second = brushText(svg, { text: groom, x: CX, y: yBase, size: ySize, className: 'names__name' });
+    const second = brushText(svg, { text: secondName, x: CX, y: yBase, size: ySize, className: 'names__name' });
     const bead = s('circle', { cx: CX, cy: beadY, r: 6.5, class: 'names__bead' });
     const invite1 = s('text', { x: CX, y: beadY + 48, class: 'names__invite', 'text-anchor': 'middle' }, 'joyfully invite you');
     const invite2 = s('text', { x: CX, y: beadY + 78, class: 'names__invite', 'text-anchor': 'middle' }, 'to celebrate their wedding');

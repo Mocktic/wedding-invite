@@ -79,17 +79,18 @@ Good to know:
 
 ## Link options
 
-All the options the invite understands. Combine them with `&` in any order, e.g. `?invite=reception&autoplay=1`.
+All the options the invite understands. Combine them with `&` in any order, e.g. `?invite=reception&order=1`.
 
 | Option | Values | Default | What it does |
 |---|---|---|---|
 | `invite` | `family` · `wedding` · `reception` · `after-party` · `wedding-after-party` · `reception-after-party` (any preset in config) | plain link | Which events this guest sees (see above) |
-| `autoplay` | `1` (any value except `0`) | off | **The film plays itself** after the tap at a calm pace. It rests on the painted names (about 2.5 s), on the night Save the Date (about 3.5 s), and on each event card (about 3.5 s) when the cards are switched on, then stops at the RSVP. A ❚❚/▶ button (bottom-left) pauses and resumes; any scroll, swipe or arrow key pauses it too. Ignored for guests whose phone asks for reduced motion |
+| `autoplay` | `0` (or `off` / `false` / `no`) to turn it off | **on** | **The film plays itself** after the tap at a calm pace. It rests on the painted names (about 2.5 s), on the night Save the Date (about 3.5 s), and on each event card (about 3.5 s) when the cards are switched on, then stops at the RSVP. A ❚❚/▶ button (bottom-left) pauses and resumes; any scroll, swipe or arrow key pauses it too. Ignored for guests whose phone asks for reduced motion |
+| `order` | `1` | Aditi first | **Yashwant & Aditi** instead of Aditi & Yashwant: in the opening screen's names line (the photos stay as they are), the painted names, the RSVP lines, the calendar entries and the browser tab. The hashtag and the link preview (WhatsApp/iMessage card) stay as they are |
 | `cover` | `video` · `meadow` | photos | **Preview:** `video` shows the walking video (sky removed, meadow kept) on the opening screen instead of the two photos; it plays once and rests on its last frame. `meadow` shows one photo of the two of them laughing and holding hands in the meadow, with the grass fading into the paper |
 | `entrance` | `walk` | fade in | **Preview:** the two cover photos glide in from either side instead of fading in (ignored with `cover=video`) |
 | `cards` | `1` | config | **Preview:** shows the event-card deck even though `sections.celebrations` is `false` in config |
 
-Without `autoplay`, a "Swipe up to begin" cue ("Scroll to begin" on laptops) appears after the tap and
+With `autoplay=0`, a "Swipe up to begin" cue ("Scroll to begin" on laptops) appears after the tap and
 disappears on the first scroll. Then "Swipe up to continue" fades in whenever the guest stops mid-way for
 4 seconds. It never shows while the film is playing itself, while typing, or once the RSVP form is in view.
 
@@ -100,17 +101,15 @@ Replace `your-site.vercel.app` with the real address.
 | For | Link |
 |---|---|
 | Close family (all six events) | `https://your-site.vercel.app/?invite=family` |
-| Close family, plays itself | `https://your-site.vercel.app/?invite=family&autoplay=1` |
 | Wedding guests (1–3 Dec) | `https://your-site.vercel.app/?invite=wedding` |
-| Wedding guests, plays itself | `https://your-site.vercel.app/?invite=wedding&autoplay=1` |
 | Reception only | `https://your-site.vercel.app/?invite=reception` |
-| Reception only, plays itself | `https://your-site.vercel.app/?invite=reception&autoplay=1` |
 | Friends: After Party only | `https://your-site.vercel.app/?invite=after-party` |
-| Friends: After Party only, plays itself | `https://your-site.vercel.app/?invite=after-party&autoplay=1` |
 | Friends: whole wedding + After Party | `https://your-site.vercel.app/?invite=wedding-after-party` |
-| Friends: whole wedding + After Party, plays itself | `https://your-site.vercel.app/?invite=wedding-after-party&autoplay=1` |
 | Friends: Reception + After Party | `https://your-site.vercel.app/?invite=reception-after-party` |
-| Friends: Reception + After Party, plays itself | `https://your-site.vercel.app/?invite=reception-after-party&autoplay=1` |
+
+Every link plays itself by default. Add `&autoplay=0` for a guest who'd rather scroll at their own pace,
+and `&order=1` to name Yashwant first (e.g. for the groom's side), for example
+`https://your-site.vercel.app/?invite=wedding&order=1` or `https://your-site.vercel.app/?order=1&autoplay=0`.
 
 Previews for the couple to compare (not for guests yet):
 
@@ -120,7 +119,7 @@ Previews for the couple to compare (not for guests yet):
 | Meadow photo cover | `https://your-site.vercel.app/?cover=meadow` |
 | Photos gliding in | `https://your-site.vercel.app/?entrance=walk` |
 | Event cards switched back on | `https://your-site.vercel.app/?cards=1` |
-| Everything together | `https://your-site.vercel.app/?invite=family&cover=video&cards=1&autoplay=1` |
+| Everything together | `https://your-site.vercel.app/?invite=family&cover=video&cards=1` |
 
 ## Switching sections off
 
