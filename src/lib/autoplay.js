@@ -1,10 +1,16 @@
-// "The film plays itself" (?autoplay=1). After the unveil the page scrolls on its own at a calm,
+// "The film plays itself" (on by default; ?autoplay=0 turns it off). After the unveil the page scrolls on its own at a calm,
 // steady pace, holding on the beats scenes register (names painted, the night Save the Date, each
 // event card), and stops at the RSVP. Any scroll, swipe or key press hands control back; the
 // ❚❚/▶ button pauses and resumes from wherever the guest is.
 import { h } from './dom.js';
 
 const MIN_SEGMENT = 0.6; // seconds
+
+// On unless the link says otherwise: ?autoplay=0 (or off / false / no).
+export function autoplayWanted(search = '') {
+  const value = new URLSearchParams(search).get('autoplay');
+  return !['0', 'off', 'false', 'no'].includes(value?.trim().toLowerCase());
+}
 
 // Pure: the segments still ahead from fromY. beats: [{ y, hold, final }]
 export function planRoute(fromY, beats, speed) {

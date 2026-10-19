@@ -27,7 +27,7 @@ export default {
     pushkar: {
       name: 'Pushkar',
       city: 'Pushkar',
-      tagline: 'the lake town of Pushkar',
+      tagline: 'the rose garden of Rajasthan',
       address: 'Pushkar, Rajasthan', // PLACEHOLDER: swap for the exact venue once booked
       mapUrl: 'https://maps.google.com/?q=Pushkar,+Rajasthan', // swap for the exact venue's link
     },

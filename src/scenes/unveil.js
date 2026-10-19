@@ -7,7 +7,7 @@ import { overlayVideo, playVideo } from '../lib/overlayVideo.js';
 import { inkMask } from '../lib/inkMask.js';
 
 export function unveil(ctx, { onOpen }) {
-  const { config } = ctx;
+  const { config, couple } = ctx;
   const d = ctx.invite.headline.dayParts;
   const bleed = overlayVideo('alta-bleed', { blend: 'normal', loop: false, className: 'unveil__bleed' });
   bleed.preload = 'auto';
@@ -19,7 +19,7 @@ export function unveil(ctx, { onOpen }) {
     h('p', { class: 'unveil__mantra', lang: 'hi' }, '॥ श्री गणेशाय नमः ॥'),
     h('div', { class: 'unveil__seal' }, dot),
     h('p', { class: 'unveil__title', lang: 'hi' }, 'शुभ विवाह'),
-    h('p', { class: 'unveil__names' }, config.couple.bride, h('span', {}, ' & '), config.couple.groom),
+    h('p', { class: 'unveil__names' }, couple.first, h('span', {}, ' & '), couple.second),
     h('p', { class: 'unveil__date' }, `${d.day} ${d.month} ${d.year}`),
     cta,
     h('p', { class: 'unveil__hint' }, 'Sound on, please'),
@@ -33,7 +33,7 @@ export function unveil(ctx, { onOpen }) {
   const clip = useVideo
     ? h('video', {
       class: 'unveil__clip', muted: true, playsinline: true, autoplay: true, preload: 'auto',
-      poster: asset('img/cover-couple-poster.webp'), 'aria-label': `${config.couple.bride} and ${config.couple.groom}`,
+      poster: asset('img/cover-couple-poster.webp'), 'aria-label': couple.both,
     },
     // iPhone/Safari need HEVC with alpha; everyone else gets VP9 WebM with alpha
     h('source', { src: asset('video/cover-couple.mov'), type: 'video/quicktime; codecs="hvc1"' }),
@@ -42,7 +42,7 @@ export function unveil(ctx, { onOpen }) {
   if (clip) clip.muted = true;
   // PREVIEW: ?cover=meadow shows one photo of the two of them laughing, holding hands in the meadow.
   const meadow = !clip && cover === 'meadow'
-    ? h('img', { class: 'unveil__couple', src: asset('img/cover-meadow.webp'), alt: `${config.couple.bride} and ${config.couple.groom}`, decoding: 'async' })
+    ? h('img', { class: 'unveil__couple', src: asset('img/cover-meadow.webp'), alt: couple.both, decoding: 'async' })
     : null;
   const people = clip ? [clip] : meadow ? [meadow] : [bride, groom];
   const pair = h('div', { class: `unveil__pair${clip ? ' unveil__pair--clip' : ''}` }, ...people);

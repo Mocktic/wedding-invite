@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { planRoute, cruise } from './autoplay.js';
+import { planRoute, cruise, autoplayWanted } from './autoplay.js';
 
 describe('planRoute', () => {
   const beats = [
@@ -53,5 +53,19 @@ describe('cruise', () => {
       expect(p).toBeGreaterThanOrEqual(prev - 1e-9);
       prev = p;
     }
+  });
+});
+
+describe('autoplayWanted', () => {
+  it('is on by default', () => {
+    expect(autoplayWanted('')).toBe(true);
+    expect(autoplayWanted('?invite=family')).toBe(true);
+    expect(autoplayWanted('?autoplay=1')).toBe(true);
+  });
+
+  it('is off only when the link says so', () => {
+    expect(autoplayWanted('?autoplay=0')).toBe(false);
+    expect(autoplayWanted('?invite=reception&autoplay=off')).toBe(false);
+    expect(autoplayWanted('?autoplay=False')).toBe(false);
   });
 });

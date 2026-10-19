@@ -25,8 +25,7 @@ const SKY = {
 const skyVars = ([top, mid, bottom]) => ({ '--sky-top': top, '--sky-mid': mid, '--sky-bottom': bottom });
 
 export function udaipur(app, ctx) {
-  const { config, invite } = ctx;
-  const { couple } = config;
+  const { invite, couple } = ctx;
   const main = invite.headline;
   const { venue } = main;
   const day = main.dayParts;
@@ -147,7 +146,7 @@ export function udaipur(app, ctx) {
   setInterval(renderCountdown, 30000);
 
   const calendarEvents = invite.events.map((e) => ({
-    title: `${e.title} · ${couple.bride} & ${couple.groom}`,
+    title: `${e.title} · ${couple.both}`,
     start: e.startISO,
     end: e.endISO,
     location: [e.venue.name, e.venue.address].filter(Boolean).join(', '),
